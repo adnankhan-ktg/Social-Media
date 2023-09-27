@@ -6,7 +6,7 @@ import lombok.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "User_Interactions")
+@Table(name = "user_interactions")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,16 +17,16 @@ public class UserInteraction {
     private Long interactionId;
 
     @ManyToOne
-    @JoinColumn(name = "User_ID")
+    @JoinColumn(name = "user_iD")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "Post_ID")
+    @JoinColumn(name = "post_id")
     private Post post;
 
-    @Column(name = "Interaction_Type")
+    @Column(name = "interaction_type")
     private String interactionType;
 
-    @Column(name = "Timestamp")
+    @Column(name = "timestamp")
     private Date timestamp;
 }

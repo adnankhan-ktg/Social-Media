@@ -6,25 +6,25 @@ import lombok.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "User_Following")
+@Table(name = "user_following")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserFollowing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Relationship_ID")
+    @Column(name = "relationship_iD")
     private Long relationshipId;
 
     @ManyToOne
-    @JoinColumn(name = "Follower_User_ID")
+    @JoinColumn(name = "follower_user_iD")
     private User followerUser;
 
     @ManyToOne
-    @JoinColumn(name = "Following_User_ID")
+    @JoinColumn(name = "following_user_iD")
     private User followingUser;
 
-    @Column(name = "Follow_Date")
+    @Column(name = "follow_date")
     private Date followDate;
 
 }

@@ -4,20 +4,21 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "User_Interests")
+@Table(name = "user_interests")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserInterest {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Interest_ID")
     private Long interestId;
 
     @ManyToOne
-    @JoinColumn(name = "User_ID")
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "Interest_Name")
+    @Column(name = "interest_name")
     private String interestName;
 }
