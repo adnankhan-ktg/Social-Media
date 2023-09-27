@@ -1,8 +1,10 @@
 package com.app.service;
 
 import com.app.model.entity.User;
+import com.app.model.request.UserRegisterRequest;
+import com.app.model.response.CommonResponse;
 
 public interface UserService {
-    User registerUser(User user);
+    CommonResponse registerUser(UserRegisterRequest user);
     // Add other user-related methods
 }

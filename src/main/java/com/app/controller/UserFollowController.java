@@ -22,6 +22,4 @@ public class UserFollowController {
         UserFollowing followedUser = userFollowService.followUser(userFollow);
         return new ResponseEntity<>(followedUser, HttpStatus.CREATED);
     }
-
-    // Add other user-follow related endpoints (e.g., unfollow, get followers, get following, etc.)
 }

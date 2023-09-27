@@ -1,7 +1,11 @@
 package com.app.controller;
 
-import com.app.model.entity.User;
+import com.app.model.request.UserRegisterRequest;
+import com.app.model.response.CommonResponse;
 import com.app.service.UserService;
+import lombok.extern.java.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +18,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        User registeredUser = userService.registerUser(user);
-        return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
-    }
+    private final static Logger log = LoggerFactory.getLogger(UserController.class);
 
-    // Add other user-related endpoints (e.g., profile update, user retrieval, etc.)
+    @PostMapping("/register")
+    public CommonResponse registerUser(@RequestBody UserRegisterRequest request) {
+        log.info("UserController :: registerUser === START");
+        return userService.registerUser(request);
+    }
 }

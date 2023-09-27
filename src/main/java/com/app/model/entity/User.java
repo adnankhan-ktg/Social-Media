@@ -29,6 +29,7 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "joining_date")
-    private Date joiningDate;
+    private Date joiningDate = new Date();
 }
