@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    @Query(value = "UPDATE posts SET post_url = :postUrl",nativeQuery = true)
+    @Query(value = "UPDATE posts SET post_url = :postUrl where postId = :postId",nativeQuery = true)
     @Modifying
     @Transactional
-    public void updatePostUrl(String postUrl);
+    public void updatePostUrl(String postUrl, int postId);
 }

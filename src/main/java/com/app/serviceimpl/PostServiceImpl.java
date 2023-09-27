@@ -26,29 +26,29 @@ public class PostServiceImpl implements PostService {
         CommonResponse res = new CommonResponse();
         try{
             JSONObject jsonDes = new JSONObject(postDesc);
-            String dir = "/src/main/resources/static/posts/";
+                String dir = "src/main/resources/static/posts/";
 
 
-            Post newPost = new Post();
-            newPost.setCaption(jsonDes.get("caption").toString());
-            newPost.setContentType(jsonDes.get("contentType").toString());
-            newPost.setUserId(Integer.parseInt(jsonDes.get("userId").toString()));
+                Post newPost = new Post();
+                newPost.setCaption(jsonDes.get("caption").toString());
+                newPost.setContentType(jsonDes.get("contentType").toString());
+                newPost.setUserId(Integer.parseInt(jsonDes.get("userId").toString()));
 
-          Post savedPost =   postRepository.save(newPost);
+              Post savedPost =   postRepository.save(newPost);
 
-          if(Objects.isNull(savedPost)){
-              res.setMsg("Internal Server Error!");
-              res.setStatusCode(500);
-              return res;
-          }else{
+              if(Objects.isNull(savedPost)){
+                  res.setMsg("Internal Server Error!");
+                  res.setStatusCode(500);
+                  return res;
+              }else{
 
-              dir = dir+savedPost.getPostId()+"."+fileExtension(post);
+                  dir = dir+savedPost.getPostId()+"."+fileExtension(post);
 
-              try (OutputStream outputStream = new FileOutputStream(new File(dir))) {
-                  outputStream.write(post.getBytes());
-              }
+                  try (OutputStream outputStream = new FileOutputStream(new File(dir))) {
+                      outputStream.write(post.getBytes());
+                  }
 
-              this.postRepository.updatePostUrl(dir);
+              this.postRepository.updatePostUrl(dir,savedPost.getPostId());
 
           }
 
