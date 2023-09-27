@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "Post_Hashtags")
+@Table(name = "post_hashtags")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,14 +12,14 @@ public class PostHashtag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Relationship_ID")
-    private Long relationshipId;
+    @Column(name = "relationship_id")
+    private int relationshipId;
 
     @ManyToOne
-    @JoinColumn(name = "Post_ID")
+    @JoinColumn(name = "post_id")
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name = "Hashtag_ID")
+    @JoinColumn(name = "hashtag_id")
     private Hashtag hashtag;
 }

@@ -12,14 +12,14 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Post {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Post_ID")
-    private Long postId;
+    @Column(name = "post_id")
+    private int postId;
 
-    @ManyToOne
-    @JoinColumn(name = "User_ID")
-    private User user;
+    @Column(name = "user_id")
+    private int userId;
 
     @Column(name = "Content_Type")
     private String contentType;
@@ -27,7 +27,9 @@ public class Post {
     @Column(name = "Caption")
     private String caption;
 
-    @Column(name = "Timestamp")
-    private Date timestamp;
-    // Getters and
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timestamp = new Date();
+
+    @Column(name = "post_url")
+    private String postUrl;
 }

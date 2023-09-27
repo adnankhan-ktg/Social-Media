@@ -7,15 +7,15 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "User_ID")
-    private Long userId;
+    @Column(name = "user_id")
+    private int userId;
 
     @Column(name = "first_name")
     private String firstName;
