@@ -11,4 +11,7 @@ import com.app.model.entity.UserInteraction;
 public interface UserInteractionRepository extends JpaRepository<UserInteraction, Long> {
 
 	List<UserInteraction> findByUserUserId(Long userId);
+
+	List<UserInteraction> findByUserUserIdAndPostCategoryId(int userId, int id);
+
 }

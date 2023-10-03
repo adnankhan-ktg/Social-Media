@@ -25,6 +25,7 @@ public class UserFollowing {
     private User followingUser;
 
     @Column(name = "follow_date")
-    private Date followDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date followDate =  new Date();
 
 }

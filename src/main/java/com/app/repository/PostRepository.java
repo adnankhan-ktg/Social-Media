@@ -22,7 +22,13 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 	@Query(value = "SELECT * FROM posts WHERE post_id NOT IN :excludeIds ORDER BY RAND() LIMIT :limit", nativeQuery = true)
 	List<Post> findRandomPostIds(int limit, List<Long> excludeIds);
+
+	@Query(value = "SELECT * FROM posts p WHERE p.category_id = :categoryId AND post_id NOT IN :excludeIds ORDER BY RAND() LIMIT :limit", nativeQuery = true)
+	List<Post> findRandomPostIds(int limit, List<Long> excludeIds,int categoryId);
 	
 	@Query(value = "SELECT * FROM posts ORDER BY RAND() LIMIT :limit", nativeQuery = true)
 	List<Post> findRandomPostIds(int limit);
+
+	@Query(value = "SELECT * FROM posts p where p.category_id = :categoryId ORDER BY RAND() LIMIT :limit", nativeQuery = true)
+	List<Post> findRandomPostIds(int limit, int categoryId);
 }

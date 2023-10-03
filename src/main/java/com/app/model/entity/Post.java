@@ -38,4 +38,8 @@ public class Post {
 
     @ManyToMany(mappedBy = "fetchedPosts")
     private Set<User> fetchedByUsers = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private PostCategoryMst category;
 }
