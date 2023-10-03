@@ -3,6 +3,8 @@ package com.app.serviceimpl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 import com.app.model.entity.*;
 import com.app.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,8 @@ public class FeedServiceImpl implements FeedService {
     @Autowired
     private UserRepository userRepository;
 
-		
+    @Autowired
+	private UserInterestRepository userInterestRepository;	
 
     @Autowired
     private PostCategoryMstRepository categoryMst;
@@ -49,10 +52,22 @@ public class FeedServiceImpl implements FeedService {
 
         List<Post> randomPost = new ArrayList<>();
 
-        if (excludeIds.isEmpty())
-            randomPost = postRepository.findRandomPostIds(2);
-        else
-            randomPost = postRepository.findRandomPostIds(2, excludeIds);
+        
+        //Fetching user interested post category
+        
+        Optional<UserInterest> userInterest = userInterestRepository.findByUserUserId(userId.intValue());
+        
+        if(userInterest.isPresent()) {
+        	
+        	//userInterest.get().get
+        	
+        } else {
+        	
+        	if (excludeIds.isEmpty())
+                randomPost = postRepository.findRandomPostIds(2);
+            else
+                randomPost = postRepository.findRandomPostIds(2, excludeIds);
+        }
 
         List<UserInteraction> userInteractionsList = new ArrayList<>();
 
