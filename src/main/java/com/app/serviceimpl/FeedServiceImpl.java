@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.app.model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.app.model.entity.Post;
 import com.app.model.entity.UserInteraction;
@@ -25,8 +26,9 @@ public class FeedServiceImpl implements FeedService {
 	@Override
 	public List<Post> getFeedUpdate(Long userId) {
 
-		List<UserInteraction> likedInteractions = userInteractionRepository.findByUserUserIdAndInteractionType(userId,
-				"like");
+		
+		
+		List<UserInteraction> likedInteractions = userInteractionRepository.findByUserUserId(userId);
 
 		List<Post> likedPosts = new ArrayList<>();
 		for (UserInteraction interaction : likedInteractions) {
