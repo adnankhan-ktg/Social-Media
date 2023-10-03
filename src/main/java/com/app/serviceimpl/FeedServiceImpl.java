@@ -3,6 +3,8 @@ package com.app.serviceimpl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import com.app.model.entity.*;
 import com.app.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,46 +27,34 @@ public class FeedServiceImpl implements FeedService {
     @Autowired
     private UserRepository userRepository;
 
-		
 
     @Autowired
     private PostCategoryMstRepository categoryMst;
 
     @Override
     public List<Post> getFeedUpdate(Long userId) {
-
         List<UserInteraction> likedInteractions = userInteractionRepository.findByUserUserId(userId);
 
+        // Extract post IDs from liked interactions
+        List<Long> excludeIds = likedInteractions.stream()
+                .map(interaction -> (long) interaction.getPost().getPostId())
+                .collect(Collectors.toList());
 
-        List<Post> likedPosts = new ArrayList<>();
-        for (UserInteraction interaction : likedInteractions) {
-            likedPosts.add(interaction.getPost());
-        }
-
-        List<Long> excludeIds = new ArrayList<>();
-
-        for (Post post : likedPosts) {
-            excludeIds.add((long) post.getPostId());
-        }
-
-        List<Post> randomPost = new ArrayList<>();
+        List<Post> randomPosts;
 
         if (excludeIds.isEmpty())
-            randomPost = postRepository.findRandomPostIds(2);
+            randomPosts = postRepository.findRandomPostIds(2);
         else
-            randomPost = postRepository.findRandomPostIds(2, excludeIds);
-
-        List<UserInteraction> userInteractionsList = new ArrayList<>();
+            randomPosts = postRepository.findRandomPostIds(2, excludeIds);
 
 
-        for (Post random : randomPost) {
-            userInteractionsList.add(new UserInteraction(random.getUser(), random, "fetched"));
-        }
+        List<UserInteraction> userInteractionsList = randomPosts.stream()
+                .map(random -> new UserInteraction(random.getUser(), random, "fetched"))
+                .collect(Collectors.toList());
 
         this.userInteractionRepository.saveAll(userInteractionsList);
 
-
-        return randomPost;
+        return randomPosts;
     }
 
     @Override
@@ -77,38 +67,27 @@ public class FeedServiceImpl implements FeedService {
         this.dataRepository.save(userSearchedData);
 
 
-
         List<UserInteraction> likedInteractions = userInteractionRepository.
-                findByUserUserId(Long.parseLong(String.valueOf(userId)));
+                findByUserUserIdAndPostCategoryId(userId, postCategoryMst.getId());
 
-        List<Post> likedPosts = new ArrayList<>();
-        for (UserInteraction interaction : likedInteractions) {
-            likedPosts.add(interaction.getPost());
-        }
+        // Extract post IDs from liked interactions
+        List<Long> excludeIds = likedInteractions.stream()
+                .map(interaction -> (long) interaction.getPost().getPostId())
+                .collect(Collectors.toList());
 
-        List<Long> excludeIds = new ArrayList<>();
-
-        for (Post post : likedPosts) {
-            excludeIds.add((long) post.getPostId());
-        }
-
-        List<Post> randomPost = new ArrayList<>();
+        List<Post> randomPosts;
 
         if (excludeIds.isEmpty())
-            randomPost = postRepository.findRandomPostIds(2);
+            randomPosts = postRepository.findRandomPostIds(2,postCategoryMst.getId());
         else
-            randomPost = postRepository.findRandomPostIds(2, excludeIds);
+            randomPosts = postRepository.findRandomPostIds(2, excludeIds,postCategoryMst.getId());
 
-        List<UserInteraction> userInteractionsList = new ArrayList<>();
-
-
-        for (Post random : randomPost) {
-            userInteractionsList.add(new UserInteraction(random.getUser(), random, "fetched"));
-        }
+        List<UserInteraction> userInteractionsList = randomPosts.stream()
+                .map(random -> new UserInteraction(random.getUser(), random, "fetched"))
+                .collect(Collectors.toList());
 
         this.userInteractionRepository.saveAll(userInteractionsList);
 
-
-        return randomPost;
+        return randomPosts;
     }
 }
