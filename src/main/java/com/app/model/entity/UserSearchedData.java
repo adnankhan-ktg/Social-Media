@@ -1,25 +1,30 @@
 package com.app.model.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.Date;
 
 @Entity
-@Table(name = "user_interests")
+@Table(name = "USER_SEARCHED_DATA")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInterest {
+public class UserSearchedData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Interest_ID")
-    private Long interestId;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne
     @JoinColumn(name = "category_id")
+    @ManyToOne
     private PostCategoryMst category;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timeStamp = new Date();
 }
