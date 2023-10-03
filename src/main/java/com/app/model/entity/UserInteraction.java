@@ -27,6 +27,13 @@ public class UserInteraction {
     @Column(name = "interaction_type")
     private String interactionType;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "timestamp")
-    private Date timestamp;
+    private Date timestamp = new Date();
+
+    public UserInteraction(User user, Post post, String interactionType) {
+        this.user = user;
+        this.post = post;
+        this.interactionType = interactionType;
+    }
 }

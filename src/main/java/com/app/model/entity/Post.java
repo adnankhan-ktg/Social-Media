@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts")
@@ -18,8 +20,9 @@ public class Post {
     @Column(name = "post_id")
     private int postId;
 
-    @Column(name = "user_id")
-    private int userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "Content_Type")
     private String contentType;
@@ -32,4 +35,7 @@ public class Post {
 
     @Column(name = "post_url")
     private String postUrl;
+
+    @ManyToMany(mappedBy = "fetchedPosts")
+    private Set<User> fetchedByUsers = new HashSet<>();
 }

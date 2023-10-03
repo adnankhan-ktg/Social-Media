@@ -1,11 +1,12 @@
 package com.app.serviceimpl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.app.model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.app.model.entity.Post;
 import com.app.model.entity.UserInteraction;
 import com.app.repository.PostRepository;
@@ -44,7 +45,17 @@ public class FeedServiceImpl implements FeedService {
 			randomPost = postRepository.findRandomPostIds(2);
 		else
 			randomPost = postRepository.findRandomPostIds(2, excludeIds);
-		
+
+		List<UserInteraction> userInteractionsList = new ArrayList<>();
+
+
+		for(Post random : randomPost){
+			userInteractionsList.add(new UserInteraction(random.getUser(),random,"fetched"));
+		}
+
+		this.userInteractionRepository.saveAll(userInteractionsList);
+
+
 		return randomPost;
 	}
 }
