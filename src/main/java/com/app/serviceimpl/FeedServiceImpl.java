@@ -6,6 +6,7 @@ import java.util.List;
 import com.app.model.entity.*;
 import com.app.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.app.service.FeedService;
 
@@ -24,14 +25,16 @@ public class FeedServiceImpl implements FeedService {
     @Autowired
     private UserRepository userRepository;
 
+		
+
     @Autowired
     private PostCategoryMstRepository categoryMst;
 
     @Override
     public List<Post> getFeedUpdate(Long userId) {
 
-        List<UserInteraction> likedInteractions = userInteractionRepository.findByUserUserIdAndInteractionType(userId,
-                "like");
+        List<UserInteraction> likedInteractions = userInteractionRepository.findByUserUserId(userId);
+
 
         List<Post> likedPosts = new ArrayList<>();
         for (UserInteraction interaction : likedInteractions) {
@@ -76,8 +79,7 @@ public class FeedServiceImpl implements FeedService {
 
 
         List<UserInteraction> likedInteractions = userInteractionRepository.
-                findByUserUserIdAndInteractionType(Long.parseLong(String.valueOf(userId)),
-                "like");
+                findByUserUserId(Long.parseLong(String.valueOf(userId)));
 
         List<Post> likedPosts = new ArrayList<>();
         for (UserInteraction interaction : likedInteractions) {
