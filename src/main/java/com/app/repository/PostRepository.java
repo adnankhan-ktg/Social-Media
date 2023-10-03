@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-	@Query(value = "UPDATE posts SET post_url = :postUrl where postId = :postId", nativeQuery = true)
+	@Query(value = "UPDATE posts SET post_url = :postUrl where post_id = :postId", nativeQuery = true)
 	@Modifying
 	@Transactional
 	public void updatePostUrl(String postUrl, int postId);
@@ -22,4 +22,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 	@Query(value = "SELECT * FROM posts WHERE post_id NOT IN :excludeIds ORDER BY RAND() LIMIT :limit", nativeQuery = true)
 	List<Post> findRandomPostIds(int limit, List<Long> excludeIds);
+	
+	@Query(value = "SELECT * FROM posts ORDER BY RAND() LIMIT :limit", nativeQuery = true)
+	List<Post> findRandomPostIds(int limit);
 }

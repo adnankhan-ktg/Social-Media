@@ -24,7 +24,7 @@ public class FeedServiceImpl implements FeedService {
 	@Override
 	public List<Post> getFeedUpdate(Long userId) {
 
-		List<UserInteraction> likedInteractions = userInteractionRepository.findByUserIdAndInteractionType(userId,
+		List<UserInteraction> likedInteractions = userInteractionRepository.findByUserUserIdAndInteractionType(userId,
 				"like");
 
 		List<Post> likedPosts = new ArrayList<>();
@@ -38,7 +38,12 @@ public class FeedServiceImpl implements FeedService {
 			excludeIds.add((long) post.getPostId());
 		}
 		
-		List<Post> randomPost = postRepository.findRandomPostIds(10, excludeIds);
+		List<Post> randomPost = new ArrayList<>();
+		
+		if(excludeIds.isEmpty())
+			randomPost = postRepository.findRandomPostIds(2);
+		else
+			randomPost = postRepository.findRandomPostIds(2, excludeIds);
 		
 		return randomPost;
 	}

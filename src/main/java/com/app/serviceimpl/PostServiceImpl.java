@@ -49,6 +49,9 @@ public class PostServiceImpl implements PostService {
                   }
 
               this.postRepository.updatePostUrl(dir,savedPost.getPostId());
+              res.setData("Success");
+              res.setStatusCode(200);
+              res.setMsg("Post is successfully uploaded");
 
           }
 
@@ -58,7 +61,7 @@ public class PostServiceImpl implements PostService {
            res.setMsg("Internal Server Error!");
         }
 
-        return null;
+        return res;
     }
 
     public  String fileExtension(MultipartFile file) {
