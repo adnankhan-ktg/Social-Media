@@ -1,6 +1,6 @@
 package com.app.repository;
 
-import com.app.model.entity.UserSearchedData;
+import com.app.model.entity.UserActivityData;
 
 import java.util.List;
 
@@ -9,17 +9,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserSearchedDataRepository extends JpaRepository<UserSearchedData,Integer> {
+public interface UserActivityDataRepository extends JpaRepository<UserActivityData,Integer> {
 
-		@Query(value = "SELECT u.user_id, usd.category_id " +
-	            "FROM user_searched_data usd " +
+		@Query(value = "SELECT u.user_id, uad.category_id " +
+	            "FROM user_activity_data uad " +
 	            "JOIN ( " +
 	            "    SELECT user_id, category_id, COUNT(*) AS category_count " +
-	            "    FROM user_searched_data " +
+	            "    FROM user_activity_data " +
 	            "    GROUP BY user_id, category_id " +
 	            "    ORDER BY user_id, category_count DESC " +
 	            ") AS u " +
-	            "ON usd.user_id = u.user_id " +
+	            "ON uad.user_id = u.user_id " +
 	            "GROUP BY u.user_id", nativeQuery = true)
 		List<Object[]> findMostFrequentCategoryForUsers();
 }

@@ -13,13 +13,13 @@ import com.app.model.entity.UserInterest;
 import com.app.repository.PostCategoryMstRepository;
 import com.app.repository.UserInterestRepository;
 import com.app.repository.UserRepository;
-import com.app.repository.UserSearchedDataRepository;
+import com.app.repository.UserActivityDataRepository;
 
 @Component
 public class UserCategoryUpdateScheduler {
 
 	@Autowired
-	private UserSearchedDataRepository userSearchedDataRepository;
+	private UserActivityDataRepository userActivityDataRepository;
 
 	@Autowired
 	private UserInterestRepository userInterestRepository;
@@ -33,7 +33,7 @@ public class UserCategoryUpdateScheduler {
 	// Scheduled method that runs every day at 4 AM
 	@Scheduled(cron = "0 0 4 * * ?")
     public void updateInterestedCategories() {
-        List<Object[]> userCategoryCounts = userSearchedDataRepository.findMostFrequentCategoryForUsers();
+        List<Object[]> userCategoryCounts = userActivityDataRepository.findMostFrequentCategoryForUsers();
         
         for (Object[] result : userCategoryCounts) {
             Long userId = (Long) result[0];

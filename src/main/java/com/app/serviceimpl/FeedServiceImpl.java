@@ -1,108 +1,114 @@
 package com.app.serviceimpl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.app.model.entity.*;
-import com.app.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import com.app.model.entity.Post;
+import com.app.model.entity.PostCategoryMst;
+import com.app.model.entity.User;
+import com.app.model.entity.UserInteraction;
+import com.app.model.entity.UserInterest;
+import com.app.model.entity.UserActivityData;
+import com.app.repository.PostCategoryMstRepository;
+import com.app.repository.PostRepository;
+import com.app.repository.UserInteractionRepository;
+import com.app.repository.UserInterestRepository;
+import com.app.repository.UserRepository;
+import com.app.repository.UserActivityDataRepository;
 import com.app.service.FeedService;
 
 @Service
 public class FeedServiceImpl implements FeedService {
 
-    @Autowired
-    private PostRepository postRepository;
+	@Autowired
+	private PostRepository postRepository;
 
-    @Autowired
-    private UserInteractionRepository userInteractionRepository;
+	@Autowired
+	private UserInteractionRepository userInteractionRepository;
 
-    @Autowired
-    private UserSearchedDataRepository dataRepository;
+	@Autowired
+	private UserActivityDataRepository dataRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    @Autowired
+	@Autowired
 	private UserInterestRepository userInterestRepository;
 
-    @Autowired
-    private PostCategoryMstRepository categoryMst;
+	@Autowired
+	private PostCategoryMstRepository categoryMst;
 
-    @Override
-    public List<Post> getFeedUpdate(Long userId) {
-        List<UserInteraction> likedInteractions = userInteractionRepository.findByUserUserId(userId);
+	@Override
+	public List<Post> getFeedUpdate(Long userId) {
+		List<UserInteraction> likedInteractions = userInteractionRepository.findByUserUserId(userId);
 
-        // Extract post IDs from liked interactions
-        List<Long> excludeIds = likedInteractions.stream()
-                .map(interaction -> (long) interaction.getPost().getPostId())
-                .collect(Collectors.toList());
+		// Extract post IDs from liked interactions
+		List<Long> excludeIds = likedInteractions.stream().map(interaction -> (long) interaction.getPost().getPostId())
+				.collect(Collectors.toList());
 
-        List<Post> randomPosts = new ArrayList<>();
-        
-        //Fetching user interested post category
-        
-        Optional<UserInterest> userInterest = userInterestRepository.findByUserUserId(userId.intValue());
-        
-        if(userInterest.isPresent()) {
-        	
-        	UserInterest interest = userInterest.get();
-        	randomPosts = postRepository.findRandomPostIds(2, excludeIds, interest.getCategory().getId());
-        	
-        } else {
-        	
-        	if (excludeIds.isEmpty())
-                randomPosts = postRepository.findRandomPostIds(2);
-            else
-                randomPosts = postRepository.findRandomPostIds(2, excludeIds);
-        }
+		List<Post> randomPosts = new ArrayList<>();
 
+		// Fetching user interested post category
 
-        List<UserInteraction> userInteractionsList = randomPosts.stream()
-                .map(random -> new UserInteraction(random.getUser(), random, "fetched"))
-                .collect(Collectors.toList());
+		Optional<UserInterest> userInterest = userInterestRepository.findByUserUserId(userId.intValue());
 
-        this.userInteractionRepository.saveAll(userInteractionsList);
+		if (userInterest.isPresent()) {
 
-        return randomPosts;
-    }
+			UserInterest interest = userInterest.get();
+			if (excludeIds.isEmpty())
+				randomPosts = postRepository.findRandomPostIds(2, interest.getCategory().getId());
+			else
+				randomPosts = postRepository.findRandomPostIds(2, excludeIds, interest.getCategory().getId());
 
-    @Override
-    public List<Post> getSearchedFeedUpdate(int userId, String search) {
-        UserSearchedData userSearchedData = new UserSearchedData();
-        User user = this.userRepository.findByUserId(userId);
-        PostCategoryMst postCategoryMst = this.categoryMst.findByName(search);
-        userSearchedData.setUser(user);
-        userSearchedData.setCategory(postCategoryMst);
-        this.dataRepository.save(userSearchedData);
+		} else {
 
+			if (excludeIds.isEmpty())
+				randomPosts = postRepository.findRandomPostIds(2);
+			else
+				randomPosts = postRepository.findRandomPostIds(2, excludeIds);
+		}
 
-        List<UserInteraction> likedInteractions = userInteractionRepository.
-                findByUserUserIdAndPostCategoryId(userId, postCategoryMst.getId());
+		List<UserInteraction> userInteractionsList = randomPosts.stream()
+				.map(random -> new UserInteraction(random.getUser(), random, "fetched")).collect(Collectors.toList());
 
-        // Extract post IDs from liked interactions
-        List<Long> excludeIds = likedInteractions.stream()
-                .map(interaction -> (long) interaction.getPost().getPostId())
-                .collect(Collectors.toList());
+		this.userInteractionRepository.saveAll(userInteractionsList);
 
-        List<Post> randomPosts;
+		return randomPosts;
+	}
 
-        if (excludeIds.isEmpty())
-            randomPosts = postRepository.findRandomPostIds(2,postCategoryMst.getId());
-        else
-            randomPosts = postRepository.findRandomPostIds(2, excludeIds,postCategoryMst.getId());
+	@Override
+	public List<Post> getSearchedFeedUpdate(int userId, String search) {
+		UserActivityData userSearchedData = new UserActivityData();
+		User user = this.userRepository.findByUserId(userId);
+		PostCategoryMst postCategoryMst = this.categoryMst.findByName(search);
+		userSearchedData.setUser(user);
+		userSearchedData.setCategory(postCategoryMst);
+		this.dataRepository.save(userSearchedData);
 
-        List<UserInteraction> userInteractionsList = randomPosts.stream()
-                .map(random -> new UserInteraction(random.getUser(), random, "fetched"))
-                .collect(Collectors.toList());
+		List<UserInteraction> likedInteractions = userInteractionRepository.findByUserUserIdAndPostCategoryId(userId,
+				postCategoryMst.getId());
 
-        this.userInteractionRepository.saveAll(userInteractionsList);
+		// Extract post IDs from liked interactions
+		List<Long> excludeIds = likedInteractions.stream().map(interaction -> (long) interaction.getPost().getPostId())
+				.collect(Collectors.toList());
 
-        return randomPosts;
-    }
+		List<Post> randomPosts;
+
+		if (excludeIds.isEmpty())
+			randomPosts = postRepository.findRandomPostIds(2, postCategoryMst.getId());
+		else
+			randomPosts = postRepository.findRandomPostIds(2, excludeIds, postCategoryMst.getId());
+
+		List<UserInteraction> userInteractionsList = randomPosts.stream()
+				.map(random -> new UserInteraction(random.getUser(), random, "fetched")).collect(Collectors.toList());
+
+		this.userInteractionRepository.saveAll(userInteractionsList);
+
+		return randomPosts;
+	}
 }
