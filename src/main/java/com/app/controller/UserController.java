@@ -22,4 +22,10 @@ public class UserController {
         log.info("UserController :: registerUser === START");
         return userService.registerUser(request);
     }
+
+
+    @GetMapping("/fetchAll")
+    public CommonResponse fetchAllUser(){
+        return this.userService.fetchAllUser();
+    }
 }

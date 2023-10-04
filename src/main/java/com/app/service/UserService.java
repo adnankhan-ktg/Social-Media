@@ -6,5 +6,6 @@ import com.app.model.response.CommonResponse;
 
 public interface UserService {
     CommonResponse registerUser(UserRegisterRequest user);
-    // Add other user-related methods
+
+    CommonResponse fetchAllUser();
 }
