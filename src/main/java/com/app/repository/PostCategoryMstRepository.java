@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface PostCategoryMstRepository extends JpaRepository<PostCategoryMst, Integer> {
 
     PostCategoryMst findByName(String name);
+
 }

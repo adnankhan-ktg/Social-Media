@@ -3,12 +3,9 @@ package com.app.controller;
 import com.app.model.request.UserRegisterRequest;
 import com.app.model.response.CommonResponse;
 import com.app.service.UserService;
-import lombok.extern.java.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

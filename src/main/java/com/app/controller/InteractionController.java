@@ -22,6 +22,4 @@ public class InteractionController {
         UserInteraction likedInteraction = interactionService.likePost(interaction);
         return new ResponseEntity<>(likedInteraction, HttpStatus.CREATED);
     }
-
-    // Add other interaction-related endpoints (e.g., comment, share, etc.)
 }

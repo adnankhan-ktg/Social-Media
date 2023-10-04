@@ -1,8 +1,10 @@
 package com.app.serviceimpl;
 
 import com.app.model.entity.Post;
+import com.app.model.entity.PostCategoryMst;
 import com.app.model.entity.User;
 import com.app.model.response.CommonResponse;
+import com.app.repository.PostCategoryMstRepository;
 import com.app.repository.PostRepository;
 import com.app.repository.UserRepository;
 import com.app.service.PostService;
@@ -25,6 +27,9 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PostCategoryMstRepository categoryMstRepository;
+
     @Override
     public CommonResponse createPost(String postDesc, MultipartFile post) {
 
@@ -36,10 +41,13 @@ public class PostServiceImpl implements PostService {
             String dir = "src/main/resources/static/posts/";
 
             User user = this.userRepository.findByUserId(Integer.parseInt(jsonDes.get("userId").toString()));
+            PostCategoryMst postCategoryMst = categoryMstRepository.findByName(jsonDes.get("categoryName").toString());
+
 
             Post newPost = new Post();
             newPost.setCaption(jsonDes.get("caption").toString());
             newPost.setContentType(jsonDes.get("contentType").toString());
+            newPost.setCategory(postCategoryMst);
             newPost.setUser(user);
 
             Post savedPost = postRepository.save(newPost);
