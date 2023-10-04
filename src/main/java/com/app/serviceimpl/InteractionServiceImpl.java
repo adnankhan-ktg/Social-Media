@@ -14,10 +14,6 @@ public class InteractionServiceImpl implements UserInteractionService {
 
     @Override
     public UserInteraction likePost(UserInteraction interaction) {
-        // Validation and like post logic
-        // You can implement other interaction-related methods here
         return interactionRepository.save(interaction);
     }
-
-    // Implement other interaction-related methods
 }

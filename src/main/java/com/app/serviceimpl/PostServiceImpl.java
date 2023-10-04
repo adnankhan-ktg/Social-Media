@@ -2,9 +2,12 @@ package com.app.serviceimpl;
 
 import com.app.model.entity.Post;
 import com.app.model.entity.PostCategoryMst;
+import com.app.model.entity.PostComment;
 import com.app.model.entity.User;
+import com.app.model.request.PostCommentRequest;
 import com.app.model.response.CommonResponse;
 import com.app.repository.PostCategoryMstRepository;
+import com.app.repository.PostCommentRepository;
 import com.app.repository.PostRepository;
 import com.app.repository.UserRepository;
 import com.app.service.PostService;
@@ -12,7 +15,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -29,6 +31,9 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private PostCategoryMstRepository categoryMstRepository;
+
+    @Autowired
+    private PostCommentRepository postCommentRepository;
 
     @Override
     public CommonResponse createPost(String postDesc, MultipartFile post) {
@@ -80,6 +85,29 @@ public class PostServiceImpl implements PostService {
         return res;
     }
 
+    @Override
+    public CommonResponse commentOnPost(PostCommentRequest postCommentRequest) {
+
+        PostComment postComment = new PostComment();
+        CommonResponse res = new CommonResponse();
+
+       Post fetchedPost =  this.postRepository.findByPostId(postCommentRequest.getPostId()).get();
+
+        postComment.setComment(postCommentRequest.getComment());
+        postComment.setPost(fetchedPost);
+
+        PostComment savedComment =  this.postCommentRepository.save(postComment);
+
+        if (Objects.isNull(savedComment)){
+            res.setStatusCode(500);
+            res.setMsg("Internal Server Error!");
+        }else{
+            res.setMsg("Comment has been initiated!");
+            res.setStatusCode(200);
+        }
+        return res;
+    }
+
     public String fileExtension(MultipartFile file) {
         String extension = "";
         Integer i = null;
@@ -94,5 +122,4 @@ public class PostServiceImpl implements PostService {
         return extension;
     }
 
-    // Implement other post-related methods
 }
