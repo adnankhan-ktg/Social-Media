@@ -32,7 +32,7 @@ public class InteractionServiceImpl implements UserInteractionService {
 			userActivityData.setActivityType("like");
 			userActivityData.setUser(userInteraction.getUser());
 			userActivityData.setCategory(
-					postRepository.findById((long) userInteraction.getPost().getPostId()).get().getCategory());
+					postRepository.findById(userInteraction.getPost().getPostId()).get().getCategory());
 
 			userActivityDataRepository.save(userActivityData);
 		}

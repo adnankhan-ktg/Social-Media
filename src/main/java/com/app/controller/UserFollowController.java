@@ -1,8 +1,8 @@
 package com.app.controller;
 
-import com.app.model.entity.UserFollowing;
 import com.app.model.request.UserFollowingRequest;
-import com.app.service.UserFollowService;
+import com.app.model.response.CommonResponse;
+import com.app.service.FollowsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserFollowController {
 
     @Autowired
-    private UserFollowService userFollowService;
+    private FollowsService userFollowService;
 
     @PostMapping("/follow")
-    public ResponseEntity<UserFollowing> followUser(@RequestBody UserFollowingRequest userFollow) {
-        UserFollowing followedUser = userFollowService.followUser(userFollow);
-        return new ResponseEntity<>(followedUser, HttpStatus.CREATED);
+    public ResponseEntity<CommonResponse> followUser(@RequestBody UserFollowingRequest userFollow) {
+        return new ResponseEntity<>(userFollowService.followUser(userFollow), HttpStatus.CREATED);
     }
 }
