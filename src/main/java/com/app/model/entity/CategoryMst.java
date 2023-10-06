@@ -6,10 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "CATEGORY_MST")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "CATEGORY_MST")
 public class CategoryMst {
 
     @Id

@@ -14,7 +14,6 @@ import com.app.repository.PostRepository;
 import com.app.repository.UserInteractionRepository;
 import com.app.repository.UserInterestRepository;
 import com.app.repository.UserRepository;
-import com.app.repository.UserActivityDataRepository;
 import com.app.service.FeedService;
 
 @Service
@@ -26,8 +25,6 @@ public class FeedServiceImpl implements FeedService {
     @Autowired
     private UserInteractionRepository userInteractionRepository;
 
-    @Autowired
-    private UserActivityDataRepository dataRepository;
 
     @Autowired
     private UserRepository userRepository;
