@@ -1,6 +1,6 @@
 package com.app.controller;
 
-import com.app.model.entity.PostCategoryMst;
+import com.app.model.entity.CategoryMst;
 import com.app.service.PostCategoryMstService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ public class PostCategoryMstController {
     private PostCategoryMstService postCategoryMstService;
 
     @GetMapping("/fetchAll")
-    public ResponseEntity<List<PostCategoryMst>> getCategoryMstData() {
+    public ResponseEntity<List<CategoryMst>> getCategoryMstData() {
         return new ResponseEntity<>(this.postCategoryMstService.getCategoryMstData(), HttpStatus.OK);
 
     }

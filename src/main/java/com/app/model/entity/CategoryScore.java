@@ -4,27 +4,25 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.Date;
 
 @Entity
-@Table(name = "USER_SEARCHED_DATA")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserSearchedData {
+@Table(name = "CATEGORY_SCORE")
+public class CategoryScore {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_category_score_id")
+    private UserCategoryScore userCategoryScore;
 
-    @JoinColumn(name = "category_id")
-    @ManyToOne
+    @Column(name = "category_id")
     private CategoryMst category;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date timeStamp = new Date();
+    @Column(name = "score_value")
+    private int scoreValue;
 }

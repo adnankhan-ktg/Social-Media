@@ -1,7 +1,7 @@
 package com.app.serviceimpl;
 
 import com.app.model.entity.Post;
-import com.app.model.entity.PostCategoryMst;
+import com.app.model.entity.CategoryMst;
 import com.app.model.entity.PostComment;
 import com.app.model.entity.User;
 import com.app.model.request.PostCommentRequest;
@@ -46,7 +46,7 @@ public class PostServiceImpl implements PostService {
             String dir = "src/main/resources/static/posts/";
 
             User user = this.userRepository.findByUserId(Integer.parseInt(jsonDes.get("userId").toString()));
-            PostCategoryMst postCategoryMst = categoryMstRepository.findByName(jsonDes.get("categoryName").toString());
+            CategoryMst postCategoryMst = categoryMstRepository.findByName(jsonDes.get("categoryName").toString());
 
 
             Post newPost = new Post();
