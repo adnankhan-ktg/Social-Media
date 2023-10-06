@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "post_hashtags")
+@Table(name = "POST_HASHTAG")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

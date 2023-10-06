@@ -24,10 +24,6 @@ public class InteractionLog {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private CategoryMst category;
-
     @Column(name = "interaction_type")
     private String interactionType;
 

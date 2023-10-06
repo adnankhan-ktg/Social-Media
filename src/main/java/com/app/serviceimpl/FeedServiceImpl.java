@@ -49,14 +49,14 @@ public class FeedServiceImpl implements FeedService {
 
         Optional<InteractionLog> interactionLog = userInterestRepository.findByUserUserId(userId.intValue());
 
-        if (interactionLog.isPresent()) {
-
-            InteractionLog interest = interactionLog.get();
-            if (excludeIds.isEmpty())
-                randomPosts = postRepository.findRandomPostIds(2, interest.getCategory().getId());
-            else
-                randomPosts = postRepository.findRandomPostIds(2, excludeIds, interest.getCategory().getId());
-        }
+//        if (interactionLog.isPresent()) {
+//
+//            InteractionLog interest = interactionLog.get();
+//            if (excludeIds.isEmpty())
+//                randomPosts = postRepository.findRandomPostIds(2, interest.getCategory().getId());
+//            else
+//                randomPosts = postRepository.findRandomPostIds(2, excludeIds, interest.getCategory().getId());
+//        }
         return randomPosts;
     }
 }
