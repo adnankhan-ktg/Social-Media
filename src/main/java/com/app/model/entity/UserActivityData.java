@@ -23,7 +23,7 @@ public class UserActivityData {
 
     @JoinColumn(name = "category_id")
     @ManyToOne
-    private PostCategoryMst category;
+    private CategoryMst category;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeStamp = new Date();

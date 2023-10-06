@@ -3,8 +3,10 @@ package com.app.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
+
 @Entity
-@Table(name = "hashtags")
+@Table(name = "HASHTAG")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,10 +14,13 @@ public class Hashtag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hashtag_id")
-    private Long hashtagId;
+    private int id;
 
-    @Column(name = "hashtag_name")
-    private String hashtagName;
+    @Column(name = "NAME", unique = true, nullable = false)
+    private String name;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "CREATED_AT",nullable = false)
+    private Date createdAt = new Date();
 }
 

@@ -12,8 +12,8 @@ public class PostHashtag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "relationship_id")
-    private int relationshipId;
+
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "post_id")

@@ -36,5 +36,5 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private PostCategoryMst category;
+    private CategoryMst category;
 }

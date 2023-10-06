@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://ec2-3-25-88-85.ap-southeast-2.compute.amazonaws.com:3306/social_media
     username: monit
-    password: Mg@intellia123 
+    password: Mg@intellia123
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
