@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Entity
-@Table(name = "USER_SEARCHED_DATA")
+@Table(name = "USER_ACTIVITY_DATA")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserSearchedData {
+public class UserActivityData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +27,7 @@ public class UserSearchedData {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeStamp = new Date();
+    
+    @Column(name = "activity_type")
+    private String activityType;
 }
