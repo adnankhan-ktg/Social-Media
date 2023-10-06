@@ -17,7 +17,7 @@ public class CategoryScore {
     private int id;
 
     @ManyToOne
-    @Column(name = "user_category_score_id")
+    @JoinColumn(name = "user_category_score_id")
     private UserCategoryScore userCategoryScore;
 
     @Column(name = "category_id")
