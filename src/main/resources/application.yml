@@ -8,4 +8,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+#    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+
+  flyway:
+    url: jdbc:mysql://ec2-3-25-88-85.ap-southeast-2.compute.amazonaws.com:3306/social_media
+    schemas: social_media
+    user: "monit"
+    password: "Mg@intellia123"
+    baselineOnMigrate: true
+    enabled: true
