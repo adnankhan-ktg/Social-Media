@@ -1,6 +1,6 @@
 package com.app.serviceimpl;
 
-import com.app.model.entity.Follows;
+import com.app.model.entity.UserFollowings;
 import com.app.model.entity.User;
 import com.app.model.request.UserFollowingRequest;
 import com.app.model.response.CommonResponse;
@@ -31,7 +31,7 @@ public class FollowsServiceImpl implements FollowsService {
             res.setStatusCode(-1012);
         } else {
 
-            Follows following = new Follows();
+            UserFollowings following = new UserFollowings();
 
             User userFollowed = this.userRepository.findByUserId(userFollow.getFollowerUserId());
 
@@ -39,9 +39,9 @@ public class FollowsServiceImpl implements FollowsService {
 
             following.setFollowingUser(userFollowing);
 
-            following.setFollowedUser(userFollowed);
+            following.setFollowerUser(userFollowed);
 
-            Follows follows = userFollowRepository.save(following);
+            UserFollowings follows = userFollowRepository.save(following);
 
             if (Objects.isNull(follows)) {
                 res.setStatusCode(500);

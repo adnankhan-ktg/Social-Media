@@ -5,11 +5,11 @@ import lombok.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "follows")
+@Table(name = "user_followings")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Follows {
+public class UserFollowings {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +20,8 @@ public class Follows {
     private User followingUser;
 
     @ManyToOne
-    @JoinColumn(name = "followed_user_id")
-    private User followedUser;
+    @JoinColumn(name = "follower_user_id")
+    private User followerUser;
 
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)
