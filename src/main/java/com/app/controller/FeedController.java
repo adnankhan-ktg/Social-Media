@@ -21,10 +21,10 @@ public class FeedController {
 		return new ResponseEntity<>(feedUpdates, HttpStatus.OK);
 	}
 
-	@GetMapping("/updates/{userId}")
-	public ResponseEntity<List<Post>> getSearchedFeedUpdate(@PathVariable int userId, @RequestParam String search){
-
-		List<Post> feedUpdates =  this.feedService.getSearchedFeedUpdate(userId,search);
-		return new ResponseEntity<>(feedUpdates,HttpStatus.OK);
-	}
+//	@GetMapping("/updates/{userId}")
+//	public ResponseEntity<List<Post>> getSearchedFeedUpdate(@PathVariable int userId, @RequestParam String search){
+//
+//		List<Post> feedUpdates =  this.feedService.getSearchedFeedUpdate(userId,search);
+//		return new ResponseEntity<>(feedUpdates,HttpStatus.OK);
+//	}
 }
