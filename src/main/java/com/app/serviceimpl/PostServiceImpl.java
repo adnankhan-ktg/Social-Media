@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -43,50 +45,57 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public CommonResponse createPost(String postDesc, MultipartFile post) {
-
+        log.info("PostServiceImpl :: createPost === START");
         CommonResponse res = new CommonResponse();
-
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyymmhhss");
 
         try {
+
             JSONObject jsonDes = new JSONObject(postDesc);
             String dir = "src/main/resources/static/posts/";
 
-            Optional<User> user = this.userRepository.findByUserId(Integer.parseInt(jsonDes.get("userId").toString()));
-            CategoryMst postCategoryMst = categoryMstRepository.findByName(jsonDes.get("categoryName").toString());
+            int categoryId = Integer.parseInt(jsonDes.get("categoryId").toString());
+            int userId = Integer.parseInt(jsonDes.get("userId").toString());
 
+            Optional<User> fetchedUser = this.userRepository.findById(userId);
 
-            Post newPost = new Post();
-            newPost.setCaption(jsonDes.get("caption").toString());
-            newPost.setContentType(jsonDes.get("contentType").toString());
-            newPost.setCategory(postCategoryMst);
-            newPost.setUser(user.get());
+            if (fetchedUser.isPresent()) {
 
-            Post savedPost = postRepository.save(newPost);
+                Optional<CategoryMst> postCategoryMst = categoryMstRepository.findById(categoryId);
 
-            if (Objects.isNull(savedPost)) {
-                res.setMsg("Internal Server Error!");
-                res.setStatusCode(500);
-                return res;
-            } else {
+                if (postCategoryMst.isPresent()) {
 
-                dir = dir + savedPost.getPostId() + "." + fileExtension(post);
+                    Post newPost = new Post();
+                    newPost.setCaption(jsonDes.get("caption").toString());
+                    newPost.setContentType(jsonDes.get("contentType").toString());
+                    newPost.setCategory(postCategoryMst.get());
+                    newPost.setUser(fetchedUser.get());
 
-                try (OutputStream outputStream = new FileOutputStream(new File(dir))) {
-                    outputStream.write(post.getBytes());
+                    dir = dir + userId + "_" + sdf.format(new Date()) + "." + fileExtension(post);
+
+                    try (OutputStream outputStream = new FileOutputStream(new File(dir))) {
+                        outputStream.write(post.getBytes());
+                    }
+
+                    newPost.setPostUrl(dir);
+                    if (Objects.isNull(this.postRepository.save(newPost))) {
+                        res = CommonResHelper.interServerError();
+                    } else {
+                        res.setStatusCode(200);
+                        res.setMsg("Post is successfully uploaded");
+                    }
+                } else {
+                    res.setStatusCode(404);
+                    res.setMsg("Category does not exists");
                 }
-
-                this.postRepository.updatePostUrl(dir, savedPost.getPostId());
-                res.setData("Success");
-                res.setStatusCode(200);
-                res.setMsg("Post is successfully uploaded");
+            } else {
+                res.setMsg("User does not exists!");
+                res.setStatusCode(404);
             }
-
-
         } catch (Exception ex) {
-            res.setStatusCode(500);
-            res.setMsg("Internal Server Error!");
+            res = CommonResHelper.interServerError();
         }
-
+        log.info("PostServiceImpl :: createPost === END");
         return res;
     }
 
