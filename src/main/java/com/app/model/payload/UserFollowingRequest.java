@@ -1,7 +1,6 @@
-package com.app.model.request;
+package com.app.model.payload;
 
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

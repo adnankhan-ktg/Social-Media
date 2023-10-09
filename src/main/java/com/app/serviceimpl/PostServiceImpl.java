@@ -1,24 +1,24 @@
 package com.app.serviceimpl;
 
-import com.app.model.entity.Post;
-import com.app.model.entity.CategoryMst;
-import com.app.model.entity.PostComment;
-import com.app.model.entity.User;
-import com.app.model.request.PostCommentRequest;
+import com.app.controller.UserController;
+import com.app.helper.CommonResHelper;
+import com.app.model.entity.*;
+import com.app.model.payload.PostCommentRequest;
 import com.app.model.response.CommonResponse;
-import com.app.repository.PostCategoryMstRepository;
-import com.app.repository.PostCommentRepository;
-import com.app.repository.PostRepository;
-import com.app.repository.UserRepository;
+import com.app.repository.*;
 import com.app.service.PostService;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -35,6 +35,12 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private PostCommentRepository postCommentRepository;
 
+    @Autowired
+    private PostLikeRepository postLikeRepository;
+
+    private final static Logger log = LoggerFactory.getLogger(UserController.class);
+
+
     @Override
     public CommonResponse createPost(String postDesc, MultipartFile post) {
 
@@ -45,7 +51,7 @@ public class PostServiceImpl implements PostService {
             JSONObject jsonDes = new JSONObject(postDesc);
             String dir = "src/main/resources/static/posts/";
 
-            User user = this.userRepository.findByUserId(Integer.parseInt(jsonDes.get("userId").toString()));
+            Optional<User> user = this.userRepository.findByUserId(Integer.parseInt(jsonDes.get("userId").toString()));
             CategoryMst postCategoryMst = categoryMstRepository.findByName(jsonDes.get("categoryName").toString());
 
 
@@ -53,7 +59,7 @@ public class PostServiceImpl implements PostService {
             newPost.setCaption(jsonDes.get("caption").toString());
             newPost.setContentType(jsonDes.get("contentType").toString());
             newPost.setCategory(postCategoryMst);
-            newPost.setUser(user);
+            newPost.setUser(user.get());
 
             Post savedPost = postRepository.save(newPost);
 
@@ -73,7 +79,6 @@ public class PostServiceImpl implements PostService {
                 res.setData("Success");
                 res.setStatusCode(200);
                 res.setMsg("Post is successfully uploaded");
-
             }
 
 
@@ -86,25 +91,86 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public CommonResponse commentOnPost(PostCommentRequest postCommentRequest) {
-
-        PostComment postComment = new PostComment();
+    public CommonResponse doLike(int userId, int postId) {
+        log.info("PostServiceImpl :: doLike === START");
         CommonResponse res = new CommonResponse();
 
-       Post fetchedPost =  this.postRepository.findByPostId(postCommentRequest.getPostId()).get();
+        try {
+            Optional<User> fetchedUser = this.userRepository.findByUserId(userId);
 
-        postComment.setComment(postCommentRequest.getComment());
-        postComment.setPost(fetchedPost);
+            if (fetchedUser.isPresent()) {
 
-        PostComment savedComment =  this.postCommentRepository.save(postComment);
+                Optional<Post> fetchedPost = this.postRepository.findByPostId(postId);
 
-        if (Objects.isNull(savedComment)){
-            res.setStatusCode(500);
-            res.setMsg("Internal Server Error!");
-        }else{
-            res.setMsg("Comment has been initiated!");
-            res.setStatusCode(200);
+                if (fetchedPost.isPresent()) {
+
+                    PostLike postLike = new PostLike();
+                    postLike.setPost(fetchedPost.get());
+                    postLike.setUser(fetchedUser.get());
+
+                    if (Objects.nonNull(this.postLikeRepository.save(postLike))) {
+                        res.setStatusCode(200);
+                        res.setMsg("Liked successfully");
+                    } else {
+                        res = CommonResHelper.interServerError();
+                    }
+                } else {
+                    res.setMsg("Post does not exists!");
+                    res.setStatusCode(404);
+                }
+
+            } else {
+                res.setMsg("User does not exists!");
+                res.setStatusCode(404);
+            }
+
+        } catch (Exception ex) {
+            log.error("PostServiceImpl :: doLike :: Exception = {}", ex.getMessage());
+            res = CommonResHelper.interServerError();
         }
+
+        log.info("PostServiceImpl :: doLike === END");
+        return res;
+    }
+
+    @Override
+    public CommonResponse doComment(PostCommentRequest request) {
+        log.info("PostServiceImpl :: doComment === START");
+        CommonResponse res = new CommonResponse();
+        try {
+            Optional<User> fetchedUser = this.userRepository.findByUserId(request.getUserId());
+
+            if (fetchedUser.isPresent()) {
+
+                Optional<Post> fetchedPost = this.postRepository.findByPostId(request.getPostId());
+
+                if (fetchedPost.isPresent()) {
+
+                    PostComment postComment = new PostComment();
+                    postComment.setUser(fetchedUser.get());
+                    postComment.setPost(fetchedPost.get());
+                    postComment.setComment(request.getComment());
+
+                    if (Objects.nonNull(this.postCommentRepository.save(postComment))) {
+                        res.setStatusCode(200);
+                        res.setMsg("Commented successfully");
+                    } else {
+                        res = CommonResHelper.interServerError();
+                    }
+                } else {
+                    res.setMsg("Post does not exists!");
+                    res.setStatusCode(404);
+                }
+
+            } else {
+                res.setMsg("User does not exists!");
+                res.setStatusCode(404);
+            }
+        } catch (Exception ex) {
+            log.error("PostServiceImpl :: doComment :: Exception = {}", ex.getMessage());
+            res = CommonResHelper.interServerError();
+        }
+        log.info("PostServiceImpl :: doComment === END");
         return res;
     }
 

@@ -13,6 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -26,6 +27,9 @@ public class User {
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "mobile_no")
+    private String mobileNo;
 
     @Column(name = "password")
     private String password;

@@ -1,4 +1,4 @@
-package com.app.model.request;
+package com.app.model.payload;
 
 public class PostDescriptionRequest {
 

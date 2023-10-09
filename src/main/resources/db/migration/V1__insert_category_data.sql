@@ -1,7 +1,22 @@
 CREATE TABLE category_mst(ID INT AUTO_INCREMENT PRIMARY KEY,NAME VARCHAR(50));
-INSERT INTO category_mst(ID, name) VALUES (1, 'TRAVEL');
-INSERT INTO category_mst(ID, name) VALUES (2, 'SPORTS');
-INSERT INTO category_mst(ID, name) VALUES (3, 'DANCING');
-INSERT INTO category_mst(ID, name) VALUES (4, 'SINGING');
-INSERT INTO category_mst(ID, name) VALUES (5, 'RELIGIOUS');
-
+INSERT INTO category_mst (ID, name) VALUES
+(1, 'entertainment'),
+(2, 'lifestyle'),
+(3, 'inspiration'),
+(4, 'food_and_cooking'),
+(5, 'travel_and_adventure'),
+(6, 'fashion_and_style'),
+(7, 'technology'),
+(8, 'education'),
+(9, 'pets_and_animals'),
+(10, 'health_and_wellness'),
+(11, 'home_and_decor'),
+(12, 'comedy'),
+(13, 'music'),
+(14, 'beauty_and_makeup'),
+(15, 'gaming'),
+(16, 'art_and_creativity'),
+(17, 'sports_and_fitness'),
+(18, 'parenting_and_family'),
+(19, 'nature_and_environment'),
+(20, 'science_and_technology');

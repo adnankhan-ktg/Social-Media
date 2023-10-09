@@ -1,4 +1,4 @@
-package com.app.model.request;
+package com.app.model.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,4 +12,6 @@ public class PostCommentRequest {
     private String comment;
 
     private int postId;
+
+    private int userId;
 }

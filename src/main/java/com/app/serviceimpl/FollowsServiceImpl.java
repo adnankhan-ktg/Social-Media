@@ -2,17 +2,18 @@ package com.app.serviceimpl;
 
 import com.app.model.entity.UserFollowings;
 import com.app.model.entity.User;
-import com.app.model.request.UserFollowingRequest;
+import com.app.model.payload.UserFollowingRequest;
 import com.app.model.response.CommonResponse;
 import com.app.repository.UserFollowingRepository;
 import com.app.repository.UserRepository;
-import com.app.service.FollowsService;
+import com.app.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
-public class FollowsServiceImpl implements FollowsService {
+public class FollowsServiceImpl implements FollowService {
 
     @Autowired
     private UserFollowingRepository userFollowRepository;
@@ -33,13 +34,13 @@ public class FollowsServiceImpl implements FollowsService {
 
             UserFollowings following = new UserFollowings();
 
-            User userFollowed = this.userRepository.findByUserId(userFollow.getFollowerUserId());
+            Optional<User> userFollowed = this.userRepository.findByUserId(userFollow.getFollowerUserId());
 
-            User userFollowing = this.userRepository.findByUserId(userFollow.getFollowingUserId());
+            Optional<User> userFollowing = this.userRepository.findByUserId(userFollow.getFollowingUserId());
 
-            following.setFollowingUser(userFollowing);
+            following.setFollowingUser(userFollowing.get());
 
-            following.setFollowerUser(userFollowed);
+            following.setFollowerUser(userFollowed.get());
 
             UserFollowings follows = userFollowRepository.save(following);
 

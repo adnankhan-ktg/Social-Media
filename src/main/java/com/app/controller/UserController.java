@@ -1,6 +1,6 @@
 package com.app.controller;
 
-import com.app.model.request.UserRegisterRequest;
+import com.app.model.payload.SignUpPayload;
 import com.app.model.response.CommonResponse;
 import com.app.service.UserService;
 import org.slf4j.Logger;
@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
@@ -18,14 +18,15 @@ public class UserController {
     private final static Logger log = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping("/register")
-    public CommonResponse registerUser(@RequestBody UserRegisterRequest request) {
+    public CommonResponse registerUser(@RequestBody SignUpPayload request) {
         log.info("UserController :: registerUser === START");
-        return userService.registerUser(request);
+        return userService.signUp(request);
     }
 
 
     @GetMapping("/fetchAll")
     public CommonResponse fetchAllUser(){
+        log.info("UserController :: fetchAllUser === START");
         return this.userService.fetchAllUser();
     }
 }
