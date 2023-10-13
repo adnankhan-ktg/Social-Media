@@ -20,4 +20,8 @@ public class SignUpPayload {
     private String mobileNo;
 
     private String password;
+
+    private String accountType;
+
+    private String bio;
 }

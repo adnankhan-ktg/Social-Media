@@ -1,5 +1,6 @@
 package com.app.model.entity;
 
+import com.app.model.enums.FollowStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Date;
@@ -16,15 +17,17 @@ public class UserFollowings {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "following_user_id")
-    private User followingUser;
-
-    @ManyToOne
     @JoinColumn(name = "follower_user_id")
     private User followerUser;
 
+    @ManyToOne
+    @JoinColumn(name = "followed_user_id")
+    private User followedUser;
+
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createAt =  new Date();
+    private Date createAt = new Date();
 
+    @Enumerated(EnumType.STRING)
+    private FollowStatus status;
 }

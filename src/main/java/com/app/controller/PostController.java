@@ -28,7 +28,7 @@ public class PostController {
             res = postService.createPost(values, post);
         } catch (Exception ex) {
             log.error("PostController :: createPost - Exception: {}", ex.getMessage());
-            res = CommonResHelper.interServerError();
+            res = CommonResHelper.internalServerError();
         }
         log.info("PostController :: createPost - END");
         return res;
@@ -43,7 +43,7 @@ public class PostController {
             res = postService.likeOrUnlikePost(userId, postId, useCase);
         } catch (Exception ex) {
             log.error("PostController :: likeOrUnlike - Exception: {}", ex.getMessage());
-            res = CommonResHelper.interServerError();
+            res = CommonResHelper.internalServerError();
         }
         log.info("PostController :: likeOrUnlike - END");
         return res;
@@ -58,7 +58,7 @@ public class PostController {
             res = postService.addComment(request);
         } catch (Exception ex) {
             log.error("PostController :: addComment - Exception: {}", ex.getMessage());
-            res = CommonResHelper.interServerError();
+            res = CommonResHelper.internalServerError();
         }
         log.info("PostController :: addComment - END");
         return res;
@@ -73,7 +73,7 @@ public class PostController {
             res = postService.deleteCommentById(id);
         } catch (Exception ex) {
             log.error("PostController :: deleteComment - Exception: {}", ex.getMessage());
-            res = CommonResHelper.interServerError();
+            res = CommonResHelper.internalServerError();
         }
         log.info("PostController :: deleteComment - END");
         return res;
@@ -88,7 +88,7 @@ public class PostController {
             res = postService.getCommentsForPost(postId);
         } catch (Exception ex) {
             log.error("PostController :: getCommentsForPost - Exception: {}", ex.getMessage());
-            res = CommonResHelper.interServerError();
+            res = CommonResHelper.internalServerError();
         }
         log.info("PostController :: getCommentsForPost - END");
         return res;
@@ -103,7 +103,7 @@ public class PostController {
             res = this.postService.getLikesForPost(postId);
         } catch (Exception ex) {
             log.error("PostController :: getLikesForPost - Exception: {}", ex.getMessage());
-            res = CommonResHelper.interServerError();
+            res = CommonResHelper.internalServerError();
         }
 
         log.info("PostController :: getLikesForPost - END");

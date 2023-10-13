@@ -4,5 +4,9 @@ import com.app.model.payload.UserFollowingRequest;
 import com.app.model.response.CommonResponse;
 
 public interface FollowService {
-    CommonResponse followUser(UserFollowingRequest userFollow);
+    CommonResponse followRequest(UserFollowingRequest userFollow);
+
+    CommonResponse getPendingFriendRequests(int userId);
+
+    CommonResponse respondToFriendRequest(int requestId, String status);
 }

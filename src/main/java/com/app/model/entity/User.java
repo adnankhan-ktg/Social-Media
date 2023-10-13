@@ -37,4 +37,9 @@ public class User {
     @Column(name = "joining_date")
     private Date joiningDate = new Date();
 
+    @Column(name = "account_type")
+    private String accountType; // private or public
+
+    @Column(name = "bio", length = 255)  // Adjust the length as needed
+    private String bio;
 }

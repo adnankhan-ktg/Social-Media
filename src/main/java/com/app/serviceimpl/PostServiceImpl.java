@@ -80,7 +80,7 @@ public class PostServiceImpl implements PostService {
 
                     newPost.setPostUrl(dir);
                     if (Objects.isNull(this.postRepository.save(newPost))) {
-                        res = CommonResHelper.interServerError();
+                        res = CommonResHelper.internalServerError();
                     } else {
                         res.setStatusCode(200);
                         res.setMsg("Post is successfully uploaded");
@@ -94,7 +94,7 @@ public class PostServiceImpl implements PostService {
                 res.setStatusCode(404);
             }
         } catch (Exception ex) {
-            res = CommonResHelper.interServerError();
+            res = CommonResHelper.internalServerError();
         }
         log.info("PostServiceImpl :: createPost === END");
         return res;
@@ -128,7 +128,7 @@ public class PostServiceImpl implements PostService {
                                     res.setStatusCode(200);
                                     res.setMsg("Liked successfully");
                                 } else {
-                                    res = CommonResHelper.interServerError();
+                                    res = CommonResHelper.internalServerError();
                                 }
                             } else {
                                 res.setStatusCode(-1020);
@@ -157,7 +157,7 @@ public class PostServiceImpl implements PostService {
 
         } catch (Exception ex) {
             log.error("PostServiceImpl :: likeOrUnlikePost :: Exception = {}", ex.getMessage());
-            res = CommonResHelper.interServerError();
+            res = CommonResHelper.internalServerError();
         }
 
         log.info("PostServiceImpl :: likeOrUnlikePost === END");
@@ -186,7 +186,7 @@ public class PostServiceImpl implements PostService {
                         res.setStatusCode(200);
                         res.setMsg("Commented successfully");
                     } else {
-                        res = CommonResHelper.interServerError();
+                        res = CommonResHelper.internalServerError();
                     }
                 } else {
                     res.setMsg("Post does not exists!");
@@ -199,7 +199,7 @@ public class PostServiceImpl implements PostService {
             }
         } catch (Exception ex) {
             log.error("PostServiceImpl :: addComment :: Exception = {}", ex.getMessage());
-            res = CommonResHelper.interServerError();
+            res = CommonResHelper.internalServerError();
         }
         log.info("PostServiceImpl :: addComment === END");
         return res;
@@ -215,7 +215,7 @@ public class PostServiceImpl implements PostService {
             res.setStatusCode(200);
         } catch (Exception ex) {
             log.error("PostServiceImpl :: deleteCommentById :: Exception = {}", ex.getMessage());
-            res = CommonResHelper.interServerError();
+            res = CommonResHelper.internalServerError();
         }
         log.info("PostServiceImpl :: deleteCommentById === END");
         return res;
@@ -243,7 +243,7 @@ public class PostServiceImpl implements PostService {
             }
         } catch (Exception ex) {
             log.error("PostServiceImpl :: getCommentsForPost - Exception: {}", ex.getMessage());
-            res = CommonResHelper.interServerError();
+            res = CommonResHelper.internalServerError();
         }
 
         log.info("PostServiceImpl :: getCommentsForPost - END");
@@ -271,7 +271,7 @@ public class PostServiceImpl implements PostService {
             }
         } catch (Exception ex) {
             log.error("PostServiceImpl :: getLikesForPost - Exception: {}", ex.getMessage());
-            res = CommonResHelper.interServerError();
+            res = CommonResHelper.internalServerError();
         }
 
         log.info("PostServiceImpl :: getLikesForPost - END");
