@@ -9,8 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserInteractionRepository extends JpaRepository<InteractionLog, Long> {
 
-	List<InteractionLog> findByUserUserId(Long userId);
-
-	List<InteractionLog> findByUserUserIdAndPostCategoryId(int userId, int id);
-
+	List<InteractionLog> findByUserId(int userId);
 }

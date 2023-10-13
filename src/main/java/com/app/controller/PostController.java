@@ -24,11 +24,12 @@ public class PostController {
     }
 
 
-    @PostMapping("/like")
+    @PostMapping("/likeOrUnlike")
     public CommonResponse doLike(@RequestParam(name = "userId") int userId,
-                                 @RequestParam("/postId") int postId) {
+                                 @RequestParam("postId") int postId,
+                                 @RequestParam(name = "case") String useCase) {
         log.info("PostController :: doLike === START");
-        return this.postService.doLike(userId,postId);
+        return this.postService.doLikeOrUnlike(userId, postId, useCase);
     }
 
     @PostMapping("/comment")
@@ -36,4 +37,6 @@ public class PostController {
         log.info("PostController :: doComment === START");
         return this.postService.doComment(request);
     }
+
+
 }

@@ -38,7 +38,7 @@ public class PostServiceImpl implements PostService {
     private PostCommentRepository postCommentRepository;
 
     @Autowired
-    private PostLikeRepository postLikeRepository;
+    private LikedPostRepository postLikeRepository;
 
     private final static Logger log = LoggerFactory.getLogger(UserController.class);
 
@@ -100,29 +100,50 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public CommonResponse doLike(int userId, int postId) {
-        log.info("PostServiceImpl :: doLike === START");
+    public CommonResponse doLikeOrUnlike(int userId, int postId, String useCase) {
+        log.info("PostServiceImpl :: doLikeOrUnlike === START");
         CommonResponse res = new CommonResponse();
 
         try {
-            Optional<User> fetchedUser = this.userRepository.findByUserId(userId);
+
+            Optional<User> fetchedUser = this.userRepository.findById(userId);
 
             if (fetchedUser.isPresent()) {
 
-                Optional<Post> fetchedPost = this.postRepository.findByPostId(postId);
+                Optional<Post> fetchedPost = this.postRepository.findById(postId);
 
                 if (fetchedPost.isPresent()) {
 
-                    PostLike postLike = new PostLike();
-                    postLike.setPost(fetchedPost.get());
-                    postLike.setUser(fetchedUser.get());
+                    switch (useCase.toLowerCase()) {
 
-                    if (Objects.nonNull(this.postLikeRepository.save(postLike))) {
-                        res.setStatusCode(200);
-                        res.setMsg("Liked successfully");
-                    } else {
-                        res = CommonResHelper.interServerError();
+                        case "like":
+
+                            if (Objects.isNull(this.postLikeRepository.findByPostIdAndUserId(postId, userId))) {
+                                LikedPost postLike = new LikedPost();
+                                postLike.setPost(fetchedPost.get());
+                                postLike.setUser(fetchedUser.get());
+
+                                if (Objects.nonNull(this.postLikeRepository.save(postLike))) {
+                                    res.setStatusCode(200);
+                                    res.setMsg("Liked successfully");
+                                } else {
+                                    res = CommonResHelper.interServerError();
+                                }
+                            } else {
+                                res.setStatusCode(-1020);
+                                res.setMsg("Already Liked");
+                            }
+                            break;
+
+                        case "unlike":
+                            this.postLikeRepository.unlikePost(postId, userId);
+                            res.setMsg("UnLiked post successfully!");
+                            res.setStatusCode(200);
+                            break;
+                        default:
+                            break;
                     }
+
                 } else {
                     res.setMsg("Post does not exists!");
                     res.setStatusCode(404);
@@ -134,11 +155,11 @@ public class PostServiceImpl implements PostService {
             }
 
         } catch (Exception ex) {
-            log.error("PostServiceImpl :: doLike :: Exception = {}", ex.getMessage());
+            log.error("PostServiceImpl :: doLikeOrUnlike :: Exception = {}", ex.getMessage());
             res = CommonResHelper.interServerError();
         }
 
-        log.info("PostServiceImpl :: doLike === END");
+        log.info("PostServiceImpl :: doLikeOrUnlike === END");
         return res;
     }
 
@@ -147,11 +168,11 @@ public class PostServiceImpl implements PostService {
         log.info("PostServiceImpl :: doComment === START");
         CommonResponse res = new CommonResponse();
         try {
-            Optional<User> fetchedUser = this.userRepository.findByUserId(request.getUserId());
+            Optional<User> fetchedUser = this.userRepository.findById(request.getUserId());
 
             if (fetchedUser.isPresent()) {
 
-                Optional<Post> fetchedPost = this.postRepository.findByPostId(request.getPostId());
+                Optional<Post> fetchedPost = this.postRepository.findById(request.getPostId());
 
                 if (fetchedPost.isPresent()) {
 

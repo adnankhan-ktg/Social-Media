@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "CATEGORY_SCORE")
+@Table(name = "category_score")
 public class CategoryScore {
 
     @Id

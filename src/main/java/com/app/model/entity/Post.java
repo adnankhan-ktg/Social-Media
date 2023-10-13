@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Entity
-@Table(name = "POST")
+@Table(name = "post")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,17 +15,16 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id")
-    private int postId;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "Content_Type")
+    @Column(name = "content_type")
     private String contentType;
 
-    @Column(name = "Caption")
+    @Column(name = "caption")
     private String caption;
 
     @Temporal(TemporalType.TIMESTAMP)

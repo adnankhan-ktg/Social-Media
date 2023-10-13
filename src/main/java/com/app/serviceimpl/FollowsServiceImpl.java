@@ -34,9 +34,9 @@ public class FollowsServiceImpl implements FollowService {
 
             UserFollowings following = new UserFollowings();
 
-            Optional<User> userFollowed = this.userRepository.findByUserId(userFollow.getFollowerUserId());
+            Optional<User> userFollowed = this.userRepository.findById(userFollow.getFollowerUserId());
 
-            Optional<User> userFollowing = this.userRepository.findByUserId(userFollow.getFollowingUserId());
+            Optional<User> userFollowing = this.userRepository.findById(userFollow.getFollowingUserId());
 
             following.setFollowingUser(userFollowing.get());
 

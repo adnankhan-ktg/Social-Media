@@ -10,8 +10,8 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "POST_LIKE")
-public class PostLike {
+@Table(name = "liked_post")
+public class LikedPost {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

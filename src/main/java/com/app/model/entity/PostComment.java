@@ -11,7 +11,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "POST_COMMENT")
+@Table(name = "post_comment")
 public class PostComment {
 
     @Id
