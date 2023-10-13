@@ -7,8 +7,13 @@ import org.springframework.web.multipart.MultipartFile;
 public interface PostService {
     CommonResponse createPost(String postDesc, MultipartFile post);
 
-    CommonResponse doLikeOrUnlike(int userId, int postId,String useCase);
+    CommonResponse likeOrUnlikePost(int userId, int postId, String useCase);
 
-    CommonResponse doComment(PostCommentRequest postCommentRequest);
+    CommonResponse addComment(PostCommentRequest postCommentRequest);
 
+    CommonResponse deleteCommentById(int id);
+
+    CommonResponse getCommentsForPost(int postId);
+
+    CommonResponse getLikesForPost(int postId);
 }

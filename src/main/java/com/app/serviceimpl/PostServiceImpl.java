@@ -19,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -100,8 +101,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public CommonResponse doLikeOrUnlike(int userId, int postId, String useCase) {
-        log.info("PostServiceImpl :: doLikeOrUnlike === START");
+    public CommonResponse likeOrUnlikePost(int userId, int postId, String useCase) {
+        log.info("PostServiceImpl :: likeOrUnlikePost === START");
         CommonResponse res = new CommonResponse();
 
         try {
@@ -136,7 +137,7 @@ public class PostServiceImpl implements PostService {
                             break;
 
                         case "unlike":
-                            this.postLikeRepository.unlikePost(postId, userId);
+                            this.postLikeRepository.deleteByPostIdAndUserId(postId, userId);
                             res.setMsg("UnLiked post successfully!");
                             res.setStatusCode(200);
                             break;
@@ -155,17 +156,17 @@ public class PostServiceImpl implements PostService {
             }
 
         } catch (Exception ex) {
-            log.error("PostServiceImpl :: doLikeOrUnlike :: Exception = {}", ex.getMessage());
+            log.error("PostServiceImpl :: likeOrUnlikePost :: Exception = {}", ex.getMessage());
             res = CommonResHelper.interServerError();
         }
 
-        log.info("PostServiceImpl :: doLikeOrUnlike === END");
+        log.info("PostServiceImpl :: likeOrUnlikePost === END");
         return res;
     }
 
     @Override
-    public CommonResponse doComment(PostCommentRequest request) {
-        log.info("PostServiceImpl :: doComment === START");
+    public CommonResponse addComment(PostCommentRequest request) {
+        log.info("PostServiceImpl :: addComment === START");
         CommonResponse res = new CommonResponse();
         try {
             Optional<User> fetchedUser = this.userRepository.findById(request.getUserId());
@@ -197,10 +198,83 @@ public class PostServiceImpl implements PostService {
                 res.setStatusCode(404);
             }
         } catch (Exception ex) {
-            log.error("PostServiceImpl :: doComment :: Exception = {}", ex.getMessage());
+            log.error("PostServiceImpl :: addComment :: Exception = {}", ex.getMessage());
             res = CommonResHelper.interServerError();
         }
-        log.info("PostServiceImpl :: doComment === END");
+        log.info("PostServiceImpl :: addComment === END");
+        return res;
+    }
+
+    @Override
+    public CommonResponse deleteCommentById(int id) {
+        log.info("PostServiceImpl :: deleteCommentById === START");
+        CommonResponse res = new CommonResponse();
+        try {
+            this.postCommentRepository.deleteById(id);
+            res.setMsg("Comment deleted!");
+            res.setStatusCode(200);
+        } catch (Exception ex) {
+            log.error("PostServiceImpl :: deleteCommentById :: Exception = {}", ex.getMessage());
+            res = CommonResHelper.interServerError();
+        }
+        log.info("PostServiceImpl :: deleteCommentById === END");
+        return res;
+    }
+
+    @Override
+    public CommonResponse getCommentsForPost(int postId) {
+        log.info("PostServiceImpl :: getCommentsForPost - START");
+        CommonResponse res = new CommonResponse();
+
+        try {
+
+            log.info("PostServiceImpl :: getCommentsForPost :: postCommentRepository.findByPostId() - postId = {}", postId);
+            List<PostComment> postCommentList = this.postCommentRepository.findByPostId(postId);
+
+            if (postCommentList.isEmpty()) {
+                log.info("PostServiceImpl :: getCommentsForPost - No comments found for this post.");
+                res.setStatusCode(404);
+                res.setMsg("No comments found for this post.");
+            } else {
+                log.info("PostServiceImpl :: getCommentsForPost - Comments have been successfully loaded.");
+                res.setMsg("Comments have been successfully loaded.");
+                res.setData(postCommentList);
+                res.setStatusCode(200);
+            }
+        } catch (Exception ex) {
+            log.error("PostServiceImpl :: getCommentsForPost - Exception: {}", ex.getMessage());
+            res = CommonResHelper.interServerError();
+        }
+
+        log.info("PostServiceImpl :: getCommentsForPost - END");
+        return res;
+    }
+
+    @Override
+    public CommonResponse getLikesForPost(int postId) {
+        log.info("PostServiceImpl :: getLikesForPost - START");
+        CommonResponse res = new CommonResponse();
+
+        try {
+
+            List<LikedPost> likedPosts = this.postLikeRepository.findByPostId(postId);
+
+            if (likedPosts.isEmpty()) {
+                log.info("PostServiceImpl :: getLikesForPost - No likes found for this post.");
+                res.setMsg("No likes found for this post");
+                res.setStatusCode(404);
+            } else {
+                log.info("PostServiceImpl :: getLikesForPost - Likes have been successfully loaded.");
+                res.setMsg("Likes have been successfully loaded");
+                res.setStatusCode(200);
+                res.setData(likedPosts);
+            }
+        } catch (Exception ex) {
+            log.error("PostServiceImpl :: getLikesForPost - Exception: {}", ex.getMessage());
+            res = CommonResHelper.interServerError();
+        }
+
+        log.info("PostServiceImpl :: getLikesForPost - END");
         return res;
     }
 
@@ -217,5 +291,17 @@ public class PostServiceImpl implements PostService {
         }
         return extension;
     }
+
+
+//    public String fileExtension(MultipartFile file) {
+//        String originalFilename = file.getOriginalFilename();
+//        int dotIndex = originalFilename.lastIndexOf('.');
+//
+//        if (dotIndex > 0) {
+//            return originalFilename.substring(dotIndex + 1);
+//        }
+//
+//        return "";
+//    }
 
 }

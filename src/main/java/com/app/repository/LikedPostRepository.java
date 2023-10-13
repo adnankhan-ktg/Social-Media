@@ -8,14 +8,18 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface LikedPostRepository extends JpaRepository<LikedPost, Integer> {
 
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM liked_post WHERE post_id = :postId AND user_id = :userId", nativeQuery = true)
-     void unlikePost(int postId, int userId);
+    void deleteByPostIdAndUserId(int postId, int userId);
 
 
     LikedPost findByPostIdAndUserId(int postId, int userId);
+
+    List<LikedPost> findByPostId(int postId);
 }
