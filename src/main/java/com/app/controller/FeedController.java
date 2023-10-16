@@ -25,7 +25,7 @@ public class FeedController {
 
     @GetMapping("/latest")
     public CommonResponse loadLatestFeed(@RequestParam("userId") int userId,
-                                         @RequestParam(value = "userId") int limit) {
+                                         @RequestParam(value = "limit") int limit) {
         log.info("FeedController :: loadLatestFeed - START");
         CommonResponse response;
         try {
