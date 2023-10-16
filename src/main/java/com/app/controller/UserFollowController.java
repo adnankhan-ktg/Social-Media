@@ -36,7 +36,7 @@ public class UserFollowController {
         return response;
     }
 
-    @GetMapping("/pendingFriendRequest/{userId}")
+    @GetMapping("/pending/{userId}/friend-requests")
     public CommonResponse getPendingFriendRequests(@PathVariable("userId") int userId) {
         log.info("UserFollowController :: pendingFriendRequests - START");
         CommonResponse response;
@@ -70,6 +70,34 @@ public class UserFollowController {
             response = CommonResHelper.internalServerError();
         }
         log.info("UserFollowController :: responseToFriendRequest - END");
+        return response;
+    }
+
+    @GetMapping("/{userId}/followers")
+    public CommonResponse getFollowersForUser(@PathVariable("userId") int userId) {
+        log.info("UserFollowController :: getFollowersForUser - START");
+        CommonResponse response;
+        try {
+            response = this.followService.getFollowersForUser(userId);
+        } catch (Exception ex) {
+            log.error("UserFollowController :: responseToFriendRequest - Exception: {}", ex.getMessage());
+            response = CommonResHelper.internalServerError();
+        }
+        log.info("UserFollowController :: getFollowersForUser - END");
+        return response;
+    }
+
+    @GetMapping("/{userId}/followings")
+    public CommonResponse getFollowingsForUser(@PathVariable("userId") int userId) {
+        log.info("UserFollowController :: getFollowingsForUser  - START");
+        CommonResponse response;
+        try {
+            response = this.followService.getFollowingsForUser(userId);
+        } catch (Exception ex) {
+            log.error("UserFollowController :: getFollowingsForUser - Exception: {}", ex.getMessage());
+            response = CommonResHelper.internalServerError();
+        }
+        log.info("UserFollowController :: getFollowingsForUser  - END");
         return response;
     }
 }

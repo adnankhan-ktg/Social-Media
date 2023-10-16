@@ -9,4 +9,8 @@ public interface FollowService {
     CommonResponse getPendingFriendRequests(int userId);
 
     CommonResponse respondToFriendRequest(int requestId, String status);
+
+    CommonResponse getFollowersForUser(int userId);
+
+    CommonResponse getFollowingsForUser(int userId);
 }

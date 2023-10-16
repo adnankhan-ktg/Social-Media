@@ -1,6 +1,7 @@
 package com.app.serviceimpl;
 
 import com.app.helper.CommonResHelper;
+import com.app.model.dto.FollowersDto;
 import com.app.model.entity.UserFollowings;
 import com.app.model.entity.User;
 import com.app.model.enums.FollowStatus;
@@ -35,8 +36,7 @@ public class FollowsServiceImpl implements FollowService {
         CommonResponse response = new CommonResponse();
 
         try {
-            if (this.userFollowRepository.checkRelationship(userFollow.getFollowedId()
-                    , userFollow.getFollowerId()) > 0) {
+            if (this.userFollowRepository.checkRelationship(userFollow.getFollowedId(), userFollow.getFollowerId()) > 0) {
                 response.setMsg("Already Followed");
                 response.setStatusCode(-1012);
             } else {
@@ -56,8 +56,7 @@ public class FollowsServiceImpl implements FollowService {
                     following.setFollowerUser(followerUser.get());
                     following.setFollowedUser(followedUser.get());
 
-                    following.setStatus(followedUser.get().getAccountType().equalsIgnoreCase("private") ?
-                            FollowStatus.PENDING : FollowStatus.APPROVED);
+                    following.setStatus(followedUser.get().getAccountType().equalsIgnoreCase("private") ? FollowStatus.PENDING : FollowStatus.APPROVED);
 
                     UserFollowings follows = userFollowRepository.save(following);
 
@@ -116,6 +115,54 @@ public class FollowsServiceImpl implements FollowService {
             response = CommonResHelper.internalServerError();
         }
         log.info("FollowsServiceImpl :: responseToFriendRequest - START");
+        return response;
+    }
+
+    @Override
+    public CommonResponse getFollowersForUser(int userId) {
+        log.info("FollowsServiceImpl :: getFollowersForUser - START");
+        CommonResponse response = new CommonResponse();
+
+        try {
+            List<FollowersDto> followers = this.userFollowRepository.getFollowersForUser(userId);
+
+            if (followers.isEmpty()) {
+                response.setMsg("No followers found for this user");
+                response.setStatusCode(404);
+            } else {
+                response.setStatusCode(200);
+                response.setMsg("Followers have been successfully loaded");
+                response.setData(followers);
+            }
+        } catch (Exception ex) {
+            log.error("FollowsServiceImpl :: getFollowersForUser - Exception: {}", ex.getMessage());
+            response = CommonResHelper.internalServerError();
+        }
+
+        log.info("FollowsServiceImpl :: getFollowersForUser - END");
+        return response;
+    }
+
+    @Override
+    public CommonResponse getFollowingsForUser(int userId) {
+        log.info("FollowsServiceImpl :: getFollowingsForUser - START");
+        CommonResponse response = new CommonResponse();
+        try {
+            List<FollowersDto> followings = this.userFollowRepository.getFollowingsForUser(userId);
+
+            if (followings.isEmpty()) {
+                response.setMsg("No followings found for this user");
+                response.setStatusCode(404);
+            } else {
+                response.setStatusCode(200);
+                response.setMsg("Followings have been successfully loaded");
+                response.setData(followings);
+            }
+        } catch (Exception ex) {
+            log.error("FollowsServiceImpl :: getFollowersForUser - Exception: {}", ex.getMessage());
+            response = CommonResHelper.internalServerError();
+        }
+        log.info("FollowsServiceImpl :: getFollowingsForUser - END");
         return response;
     }
 }
