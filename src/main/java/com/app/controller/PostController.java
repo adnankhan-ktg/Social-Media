@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/posts")
 public class PostController {
 
-    private final static Logger log = LoggerFactory.getLogger(UserController.class);
+    private final static Logger log = LoggerFactory.getLogger(PostController.class);
 
     @Autowired
     private PostService postService;

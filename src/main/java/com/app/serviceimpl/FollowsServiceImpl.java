@@ -1,11 +1,11 @@
 package com.app.serviceimpl;
 
 import com.app.helper.CommonResHelper;
-import com.app.model.dto.FollowersDto;
 import com.app.model.entity.UserFollowings;
 import com.app.model.entity.User;
 import com.app.model.enums.FollowStatus;
 import com.app.model.payload.UserFollowingRequest;
+import com.app.model.queryextractor.FollowerQueryExtractor;
 import com.app.model.response.CommonResponse;
 import com.app.repository.UserFollowingRepository;
 import com.app.repository.UserRepository;
@@ -41,6 +41,7 @@ public class FollowsServiceImpl implements FollowService {
                 response.setStatusCode(-1012);
             } else {
 
+                //TODO : need to remove below checks
                 UserFollowings following = new UserFollowings();
 
                 Optional<User> followedUser = this.userRepository.findById(userFollow.getFollowedId());
@@ -74,6 +75,28 @@ public class FollowsServiceImpl implements FollowService {
             response = CommonResHelper.internalServerError();
         }
         log.info("FollowServiceImpl :: followRequest - END");
+        return response;
+    }
+
+    @Override
+    public CommonResponse unFollowUser(UserFollowingRequest request) {
+        log.info("FollowServiceImpl :: unFollowUser - START");
+        CommonResponse response = new CommonResponse();
+        try {
+            if (this.userFollowRepository.checkRelationship(request.getFollowedId(), request.getFollowerId()) < 1) {
+                response.setMsg("Already unfollowed");
+                response.setStatusCode(-1015);
+            } else {
+
+                this.userFollowRepository.unFollowUser(request.getFollowerId(), request.getFollowedId());
+                response.setMsg("User unfollowed successfully");
+                response.setStatusCode(200);
+            }
+        } catch (Exception ex) {
+            log.error("FollowsServiceImpl :: unFollowUser - Exception: {}", ex.getMessage());
+            response = CommonResHelper.internalServerError();
+        }
+        log.info("FollowServiceImpl :: unFollowUser - END");
         return response;
     }
 
@@ -124,7 +147,7 @@ public class FollowsServiceImpl implements FollowService {
         CommonResponse response = new CommonResponse();
 
         try {
-            List<FollowersDto> followers = this.userFollowRepository.getFollowersForUser(userId);
+            List<FollowerQueryExtractor> followers = this.userFollowRepository.getFollowersForUser(userId);
 
             if (followers.isEmpty()) {
                 response.setMsg("No followers found for this user");
@@ -148,7 +171,7 @@ public class FollowsServiceImpl implements FollowService {
         log.info("FollowsServiceImpl :: getFollowingsForUser - START");
         CommonResponse response = new CommonResponse();
         try {
-            List<FollowersDto> followings = this.userFollowRepository.getFollowingsForUser(userId);
+            List<FollowerQueryExtractor> followings = this.userFollowRepository.getFollowingsForUser(userId);
 
             if (followings.isEmpty()) {
                 response.setMsg("No followings found for this user");

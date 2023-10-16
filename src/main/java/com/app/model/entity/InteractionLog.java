@@ -1,5 +1,6 @@
 package com.app.model.entity;
 
+import com.app.model.enums.InteractionType;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Date;
@@ -23,8 +24,9 @@ public class InteractionLog {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "interaction_type")
-    private String interactionType;
+    private InteractionType interactionType;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp = new Date();

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "post")
@@ -36,4 +37,10 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryMst category;
+
+    @ManyToMany
+    @JoinTable(name = "post_hashtags",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
+    private List<HashtagMst> hashtags;
 }

@@ -1,21 +1,21 @@
-package com.app.model.entity;
+    package com.app.model.entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+    import jakarta.persistence.*;
+    import lombok.AllArgsConstructor;
+    import lombok.Data;
+    import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "category_mst")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class CategoryMst {
+    @Entity
+    @Table(name = "category_mst")
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public class CategoryMst {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private int id;
 
-    @Column(name = "name", unique = true, nullable = false)
-    private String name;
-}
+        @Column(name = "name", unique = true, nullable = false)
+        private String name;
+    }

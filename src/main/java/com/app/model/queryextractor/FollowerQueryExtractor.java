@@ -1,6 +1,7 @@
-package com.app.model.dto;
+package com.app.model.queryextractor;
 
 import lombok.*;
+
 
 @NoArgsConstructor
 @Data
@@ -8,7 +9,7 @@ import lombok.*;
 @Getter
 @ToString
 @AllArgsConstructor
-public class FollowersDto {
+public class FollowerQueryExtractor {
 
     private int id;
 
@@ -17,5 +18,5 @@ public class FollowersDto {
     private String lastName;
 
     private String email;
-
 }
+

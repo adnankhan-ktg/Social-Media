@@ -5,5 +5,6 @@ import com.app.model.entity.Post;
 import com.app.model.response.CommonResponse;
 
 public interface FeedService {
-	CommonResponse getFeedUpdate(Long userId);
+
+      CommonResponse loadLatestFeed(int userId);
 }

@@ -100,4 +100,19 @@ public class UserFollowController {
         log.info("UserFollowController :: getFollowingsForUser  - END");
         return response;
     }
+
+
+    @DeleteMapping("/unfollowing")
+    public CommonResponse unFollowUser(@RequestBody UserFollowingRequest request) {
+        log.info("UserFollowController :: unFollowUser  - START");
+        CommonResponse response;
+        try {
+            response = this.followService.unFollowUser(request);
+        } catch (Exception ex) {
+            log.error("UserFollowController :: unFollowUser - Exception: {}", ex.getMessage());
+            response = CommonResHelper.internalServerError();
+        }
+        log.info("UserFollowController :: unFollowUser  - END");
+        return response;
+    }
 }
