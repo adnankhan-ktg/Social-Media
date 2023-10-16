@@ -9,7 +9,7 @@ import lombok.*;
 @Getter
 @ToString
 @AllArgsConstructor
-public class FollowerQueryExtractor {
+public class FollowerQueryExt {
 
     private int id;
 

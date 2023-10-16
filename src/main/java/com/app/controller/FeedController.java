@@ -24,12 +24,13 @@ public class FeedController {
 
 
     @GetMapping("/latest")
-    public CommonResponse loadLatestFeed(@RequestParam("userId") int userId) {
+    public CommonResponse loadLatestFeed(@RequestParam("userId") int userId,
+                                         @RequestParam(value = "userId") int limit) {
         log.info("FeedController :: loadLatestFeed - START");
-        CommonResponse response = new CommonResponse();
-        try{
-
-        }catch (Exception ex){
+        CommonResponse response;
+        try {
+            response = this.feedService.loadLatestFeed(userId, limit);
+        } catch (Exception ex) {
             log.error("HashtagController :: loadLatestFeed - Exception: {}", ex.getMessage());
             response = CommonResHelper.internalServerError();
         }

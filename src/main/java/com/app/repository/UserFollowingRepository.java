@@ -1,7 +1,7 @@
 package com.app.repository;
 
 import com.app.model.entity.UserFollowings;
-import com.app.model.queryextractor.FollowerQueryExtractor;
+import com.app.model.queryextractor.FollowerQueryExt;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -26,15 +26,15 @@ public interface UserFollowingRepository extends JpaRepository<UserFollowings, I
     @Query(value = "UPDATE user_followings SET status = :status WHERE id = :id", nativeQuery = true)
     void respondToFriendRequest(int id, String status);
 
-    @Query(value = "SELECT new com.app.model.queryextractor.FollowerQueryExtractor(u.id, u.firstName, u.lastName, u.email)"
+    @Query(value = "SELECT new com.app.model.queryextractor.FollowerQueryExt(u.id, u.firstName, u.lastName, u.email)"
             + " FROM User u INNER JOIN UserFollowings uf ON"
             + " u.id = uf.followerUser.id WHERE uf.followedUser.id = :userId AND uf.status = 'APPROVED'")
-    List<FollowerQueryExtractor> getFollowersForUser(@Param("userId") int userId);
+    List<FollowerQueryExt> getFollowersForUser(@Param("userId") int userId);
 
-    @Query(value = "SELECT new com.app.model.queryextractor.FollowerQueryExtractor(u.id, u.firstName, u.lastName, u.email)"
+    @Query(value = "SELECT new com.app.model.queryextractor.FollowerQueryExt(u.id, u.firstName, u.lastName, u.email)"
             + " FROM User u INNER JOIN UserFollowings uf ON"
             + " u.id = uf.followedUser.id WHERE uf.followerUser.id = :userId AND status = 'APPROVED'")
-    List<FollowerQueryExtractor> getFollowingsForUser(@Param("userId") int userId);
+    List<FollowerQueryExt> getFollowingsForUser(@Param("userId") int userId);
 
     @Transactional
     @Modifying

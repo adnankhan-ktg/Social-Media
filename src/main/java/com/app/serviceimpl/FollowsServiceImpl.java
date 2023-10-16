@@ -5,7 +5,7 @@ import com.app.model.entity.UserFollowings;
 import com.app.model.entity.User;
 import com.app.model.enums.FollowStatus;
 import com.app.model.payload.UserFollowingRequest;
-import com.app.model.queryextractor.FollowerQueryExtractor;
+import com.app.model.queryextractor.FollowerQueryExt;
 import com.app.model.response.CommonResponse;
 import com.app.repository.UserFollowingRepository;
 import com.app.repository.UserRepository;
@@ -147,7 +147,7 @@ public class FollowsServiceImpl implements FollowService {
         CommonResponse response = new CommonResponse();
 
         try {
-            List<FollowerQueryExtractor> followers = this.userFollowRepository.getFollowersForUser(userId);
+            List<FollowerQueryExt> followers = this.userFollowRepository.getFollowersForUser(userId);
 
             if (followers.isEmpty()) {
                 response.setMsg("No followers found for this user");
@@ -171,7 +171,7 @@ public class FollowsServiceImpl implements FollowService {
         log.info("FollowsServiceImpl :: getFollowingsForUser - START");
         CommonResponse response = new CommonResponse();
         try {
-            List<FollowerQueryExtractor> followings = this.userFollowRepository.getFollowingsForUser(userId);
+            List<FollowerQueryExt> followings = this.userFollowRepository.getFollowingsForUser(userId);
 
             if (followings.isEmpty()) {
                 response.setMsg("No followings found for this user");
