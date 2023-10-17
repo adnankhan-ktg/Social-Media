@@ -2,18 +2,21 @@ package com.app.serviceimpl;
 
 import com.app.helper.CommonResHelper;
 import com.app.model.dto.LatestFeedDto;
+import com.app.model.enums.InteractionType;
 import com.app.model.interfacedto.PostDtoInterface;
 import com.app.model.response.CommonResponse;
 import com.app.repository.PostRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.app.service.FeedService;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class FeedServiceImpl implements FeedService {
@@ -30,13 +33,17 @@ public class FeedServiceImpl implements FeedService {
         try {
             List<PostDtoInterface> postDtoInterface = this.postRepository.loadLatestPost(userId, limit);
 
-            List<LatestFeedDto> latestFeedDtos = postDtoInterface.stream().map(e -> new LatestFeedDto(e.getFollowing(), e.getPostId(), e.getContentType(), e.getCaption(),
-                    e.getPostUrl(), e.getTimestamp())).toList();
-
-            if (latestFeedDtos.isEmpty()) {
+            if (postDtoInterface.isEmpty()) {
                 response.setStatusCode(404);
                 response.setMsg("No latest feed found");
             } else {
+                List<LatestFeedDto> latestFeedDtos = postDtoInterface.stream().map(e -> new LatestFeedDto(e.getFollowing(), e.getPostId(), e.getContentType(), e.getCaption(),
+                        e.getPostUrl(), e.getTimestamp())).toList();
+
+                latestFeedDtos.stream().forEach(e -> {
+                    this.postRepository.interactionLog(userId, e.getPostId(), InteractionType.VIEW.toString());
+                });
+
                 response.setData(latestFeedDtos);
                 response.setMsg("Latest feed successfully loaded");
                 response.setStatusCode(200);
@@ -48,4 +55,5 @@ public class FeedServiceImpl implements FeedService {
         log.info("FeedServiceImpl :: loadLatestFeed - END");
         return response;
     }
+
 }

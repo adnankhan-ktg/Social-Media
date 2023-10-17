@@ -30,4 +30,10 @@ public class InteractionLog {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp = new Date();
+
+    public InteractionLog(User user, Post post, InteractionType interactionType) {
+        this.user = user;
+        this.post = post;
+        this.interactionType = interactionType;
+    }
 }
