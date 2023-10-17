@@ -57,9 +57,4 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             + " ORDER BY lp.timestamp DESC", nativeQuery = true)
     List<PostDtoInterface> loadLatestPost(int userId, int limit);
 
-    @Modifying
-    @Transactional
-    @Query(value = "INSERT INTO interaction_log(interaction_type,timestamp,post_id,user_id) "
-            + "values(:interactionType, NOW(), :postId, :userId)", nativeQuery = true)
-    void interactionLog(int userId, int postId, String interactionType);
 }

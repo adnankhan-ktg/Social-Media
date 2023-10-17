@@ -5,6 +5,7 @@ import com.app.model.dto.LatestFeedDto;
 import com.app.model.enums.InteractionType;
 import com.app.model.interfacedto.PostDtoInterface;
 import com.app.model.response.CommonResponse;
+import com.app.repository.InteractionLogRepository;
 import com.app.repository.PostRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -26,6 +27,9 @@ public class FeedServiceImpl implements FeedService {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private InteractionLogRepository interactionLogRepository;
+
     @Override
     public CommonResponse loadLatestFeed(int userId, int limit) {
         log.info("FeedServiceImpl :: loadLatestFeed - START");
@@ -41,7 +45,7 @@ public class FeedServiceImpl implements FeedService {
                         e.getPostUrl(), e.getTimestamp())).toList();
 
                 latestFeedDtos.stream().forEach(e -> {
-                    this.postRepository.interactionLog(userId, e.getPostId(), InteractionType.SERVED.toString());
+                    this.interactionLogRepository.interactionLog(userId, e.getPostId(), InteractionType.SERVED.toString());
                 });
 
                 response.setData(latestFeedDtos);

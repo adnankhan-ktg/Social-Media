@@ -3,6 +3,7 @@ package com.app.serviceimpl;
 import com.app.controller.UserController;
 import com.app.helper.CommonResHelper;
 import com.app.model.entity.*;
+import com.app.model.enums.InteractionType;
 import com.app.model.payload.PostCommentRequest;
 import com.app.model.response.CommonResponse;
 import com.app.repository.*;
@@ -40,6 +41,9 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private LikedPostRepository postLikeRepository;
+
+    @Autowired
+    private InteractionLogRepository interactionLogRepository;
 
     private final static Logger log = LoggerFactory.getLogger(UserController.class);
 
@@ -183,6 +187,18 @@ public class PostServiceImpl implements PostService {
                     postComment.setComment(request.getComment());
 
                     if (Objects.nonNull(this.postCommentRepository.save(postComment))) {
+
+                        Optional<InteractionLog> interactionLog = this.interactionLogRepository.findByUserIdAndPostId(request.getUserId(), request.getPostId());
+
+                        //User user, Post post, InteractionType interactionType
+                        if (interactionLog.isEmpty()) {
+                            if (this.interactionLogRepository.save(new InteractionLog(fetchedUser.get(), fetchedPost.get(), InteractionType.COMMENT))) {
+
+                            }
+                        } else {
+
+                        }
+
                         res.setStatusCode(200);
                         res.setMsg("Commented successfully");
                     } else {
