@@ -28,7 +28,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             + "    FROM"
             + "        post AS p"
             + "    WHERE"
-            + "        p.user_id IN (SELECT followed_user_id FROM user_followings WHERE follower_user_id = :userId)"
+            + "        p.user_id IN (SELECT followed_user_id FROM user_followings WHERE follower_user_id = :userId AND status = 'APPROVED')"
             + "    AND ("
             + "        p.id NOT IN (SELECT post_id FROM interaction_log WHERE user_id = 2)"
             + "        OR p.id IS NULL)"

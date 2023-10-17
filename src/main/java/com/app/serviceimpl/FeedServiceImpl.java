@@ -41,7 +41,7 @@ public class FeedServiceImpl implements FeedService {
                         e.getPostUrl(), e.getTimestamp())).toList();
 
                 latestFeedDtos.stream().forEach(e -> {
-                    this.postRepository.interactionLog(userId, e.getPostId(), InteractionType.VIEW.toString());
+                    this.postRepository.interactionLog(userId, e.getPostId(), InteractionType.SERVED.toString());
                 });
 
                 response.setData(latestFeedDtos);

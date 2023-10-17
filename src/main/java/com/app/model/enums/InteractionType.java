@@ -5,5 +5,6 @@ public enum InteractionType {
 
     LIKE,
     COMMENT,
-    VIEW
+    VIEW,
+    SERVED
 }
