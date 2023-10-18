@@ -1,5 +1,6 @@
 package com.app.model.entity;
 
+import com.app.model.enums.UserType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,10 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "business_user_id")
+    private BusinessUser businessUser;
+
     @Column(name = "content_type")
     private String contentType;
 
@@ -37,6 +42,10 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryMst category;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_type")
+    private UserType userType;
 
     @ManyToMany
     @JoinTable(name = "post_hashtags",

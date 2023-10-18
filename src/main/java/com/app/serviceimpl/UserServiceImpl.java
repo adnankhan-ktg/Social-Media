@@ -4,6 +4,7 @@ import com.app.controller.UserController;
 import com.app.model.entity.User;
 import com.app.model.payload.SignUpPayload;
 import com.app.model.response.CommonResponse;
+import com.app.repository.BusinessUserRepository;
 import com.app.repository.UserRepository;
 import com.app.service.UserService;
 import org.slf4j.Logger;
@@ -11,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -20,6 +20,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BusinessUserRepository businessUserRepository;
 
     private final static Logger log = LoggerFactory.getLogger(UserController.class);
 

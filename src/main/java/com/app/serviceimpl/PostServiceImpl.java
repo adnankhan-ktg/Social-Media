@@ -3,7 +3,7 @@ package com.app.serviceimpl;
 import com.app.controller.UserController;
 import com.app.helper.CommonResHelper;
 import com.app.model.entity.*;
-import com.app.model.enums.InteractionType;
+import com.app.model.enums.UserType;
 import com.app.model.payload.PostCommentRequest;
 import com.app.model.response.CommonResponse;
 import com.app.repository.*;
@@ -45,6 +45,9 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private InteractionLogRepository interactionLogRepository;
 
+    @Autowired
+    private BusinessUserRepository businessUserRepository;
+
     private final static Logger log = LoggerFactory.getLogger(UserController.class);
 
 
@@ -59,12 +62,21 @@ public class PostServiceImpl implements PostService {
             JSONObject jsonDes = new JSONObject(postDesc);
             String dir = "src/main/resources/static/posts/";
 
+            String userType = jsonDes.getString("userType");
             int categoryId = Integer.parseInt(jsonDes.get("categoryId").toString());
             int userId = Integer.parseInt(jsonDes.get("userId").toString());
 
-            Optional<User> fetchedUser = this.userRepository.findById(userId);
+            Optional<BusinessUser> businessUser = Optional.empty();
+            Optional<User> fetchedUser = Optional.empty();
 
-            if (fetchedUser.isPresent()) {
+            if (userType.equalsIgnoreCase("business")) {
+                businessUser = this.businessUserRepository.findById(userId);
+            } else {
+                 fetchedUser = this.userRepository.findById(userId);
+            }
+
+
+            if (fetchedUser.isPresent() || businessUser.isPresent()) {
 
                 Optional<CategoryMst> postCategoryMst = categoryMstRepository.findById(categoryId);
 
@@ -74,7 +86,14 @@ public class PostServiceImpl implements PostService {
                     newPost.setCaption(jsonDes.get("caption").toString());
                     newPost.setContentType(jsonDes.get("contentType").toString());
                     newPost.setCategory(postCategoryMst.get());
-                    newPost.setUser(fetchedUser.get());
+                    if(userType.equalsIgnoreCase("business")){
+                        newPost.setBusinessUser(businessUser.get());
+                        newPost.setUserType(UserType.BUSINESS);
+                    }else {
+                        newPost.setUser(fetchedUser.get());
+                        newPost.setUserType(UserType.NORMAL);
+                    }
+
 
                     dir = dir + userId + "_" + sdf.format(new Date()) + "." + fileExtension(post);
 
@@ -190,14 +209,6 @@ public class PostServiceImpl implements PostService {
 
                         Optional<InteractionLog> interactionLog = this.interactionLogRepository.findByUserIdAndPostId(request.getUserId(), request.getPostId());
 
-                        //User user, Post post, InteractionType interactionType
-                        if (interactionLog.isEmpty()) {
-                            if (this.interactionLogRepository.save(new InteractionLog(fetchedUser.get(), fetchedPost.get(), InteractionType.COMMENT))) {
-
-                            }
-                        } else {
-
-                        }
 
                         res.setStatusCode(200);
                         res.setMsg("Commented successfully");
