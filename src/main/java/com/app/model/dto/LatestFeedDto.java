@@ -24,4 +24,8 @@ public class LatestFeedDto {
     private String postUrl;
 
     private Date timestamp;
+
+    private long totalLikes;
+
+    private long totalComments;
 }

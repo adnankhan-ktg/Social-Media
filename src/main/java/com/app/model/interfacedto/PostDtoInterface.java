@@ -17,4 +17,8 @@ public interface PostDtoInterface {
     String getPostUrl();
 
     Date getTimestamp();
+
+    long getTotalLikes();
+
+    long getTotalComments();
 }

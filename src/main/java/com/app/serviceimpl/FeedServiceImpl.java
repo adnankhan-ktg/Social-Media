@@ -42,7 +42,7 @@ public class FeedServiceImpl implements FeedService {
                 response.setMsg("No latest feed found");
             } else {
                 List<LatestFeedDto> latestFeedDtos = postDtoInterface.stream().map(e -> new LatestFeedDto(e.getFollowing(), e.getPostId(), e.getContentType(), e.getCaption(),
-                        e.getPostUrl(), e.getTimestamp())).toList();
+                        e.getPostUrl(), e.getTimestamp(),e.getTotalLikes(),e.getTotalComments())).toList();
 
                 latestFeedDtos.stream().forEach(e -> {
                     this.interactionLogRepository.interactionLog(userId, e.getPostId(), InteractionType.SERVED.toString());
