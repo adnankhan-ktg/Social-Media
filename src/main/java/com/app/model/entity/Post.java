@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "post")
@@ -52,4 +53,12 @@ public class Post {
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
     private List<HashtagMst> hashtags;
+
+
+    @ManyToMany
+    @JoinTable(name = "tagged_post_mapping",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"),
+    uniqueConstraints = @UniqueConstraint(columnNames = {"post_id","user_id"}))
+    private Set<User> taggedUsers;
 }

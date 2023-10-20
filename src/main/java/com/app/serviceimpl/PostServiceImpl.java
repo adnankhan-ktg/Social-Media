@@ -60,9 +60,11 @@ public class PostServiceImpl implements PostService {
         String dir = "src/main/resources/static/posts/";
 
         try {
-            Map<String, Object> jsonMap = objectMapper.readValue(postDesc, new TypeReference<>() {});
+            Map<String, Object> jsonMap = objectMapper.readValue(postDesc, new TypeReference<>() {
+            });
 
             List<Integer> taggedUsers = (List<Integer>) jsonMap.get("tagged_users");
+
             String userType = (String) jsonMap.get("userType");
             int categoryId = (int) jsonMap.get("categoryId");
             int userId = (int) jsonMap.get("userId");
@@ -103,6 +105,10 @@ public class PostServiceImpl implements PostService {
                     try (OutputStream outputStream = new FileOutputStream(new File(dir))) {
                         outputStream.write(post.getBytes());
                     }
+
+                    Set<User> actualTaggedUser = new HashSet<>(this.userRepository.findByIdIn(taggedUsers));
+
+                    newPost.setTaggedUsers(actualTaggedUser);
 
                     newPost.setPostUrl(dir);
                     if (Objects.isNull(this.postRepository.save(newPost))) {

@@ -22,11 +22,16 @@ public class UserFollowController {
     @PostMapping("/request")
     public CommonResponse followUser(@RequestBody UserFollowingRequest userFollow) {
         log.info("UserFollowController :: followUser - START");
-        CommonResponse response;
+        CommonResponse response = new CommonResponse();
 
         try {
-            response = followService.followRequest(userFollow);
-            log.info("UserFollowController :: followUser - Follow request sent successfully");
+            if (userFollow.getFollowedId() == userFollow.getFollowerId()) {
+                response.setMsg("followed and follower can't be same!");
+                response.setStatusCode(-1090);
+            } else {
+                response = followService.followRequest(userFollow);
+                log.info("UserFollowController :: followUser - Follow request sent successfully");
+            }
         } catch (Exception ex) {
             log.error("UserFollowController :: followUser - Exception: {}", ex.getMessage());
             response = CommonResHelper.internalServerError();
