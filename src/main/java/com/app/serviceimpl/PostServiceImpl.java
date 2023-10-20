@@ -8,6 +8,9 @@ import com.app.model.payload.PostCommentRequest;
 import com.app.model.response.CommonResponse;
 import com.app.repository.*;
 import com.app.service.PostService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +22,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -56,15 +56,18 @@ public class PostServiceImpl implements PostService {
         log.info("PostServiceImpl :: createPost === START");
         CommonResponse res = new CommonResponse();
         SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyymmhhss");
+        ObjectMapper objectMapper = new ObjectMapper();
+        String dir = "src/main/resources/static/posts/";
 
         try {
+            Map<String, Object> jsonMap = objectMapper.readValue(postDesc, new TypeReference<>() {});
 
-            JSONObject jsonDes = new JSONObject(postDesc);
-            String dir = "src/main/resources/static/posts/";
-
-            String userType = jsonDes.getString("userType");
-            int categoryId = Integer.parseInt(jsonDes.get("categoryId").toString());
-            int userId = Integer.parseInt(jsonDes.get("userId").toString());
+            List<Integer> taggedUsers = (List<Integer>) jsonMap.get("tagged_users");
+            String userType = (String) jsonMap.get("userType");
+            int categoryId = (int) jsonMap.get("categoryId");
+            int userId = (int) jsonMap.get("userId");
+            String caption = (String) jsonMap.get("caption");
+            String contentType = (String) jsonMap.get("contentType");
 
             Optional<BusinessUser> businessUser = Optional.empty();
             Optional<User> fetchedUser = Optional.empty();
@@ -72,7 +75,7 @@ public class PostServiceImpl implements PostService {
             if (userType.equalsIgnoreCase("business")) {
                 businessUser = this.businessUserRepository.findById(userId);
             } else {
-                 fetchedUser = this.userRepository.findById(userId);
+                fetchedUser = this.userRepository.findById(userId);
             }
 
 
@@ -83,13 +86,13 @@ public class PostServiceImpl implements PostService {
                 if (postCategoryMst.isPresent()) {
 
                     Post newPost = new Post();
-                    newPost.setCaption(jsonDes.get("caption").toString());
-                    newPost.setContentType(jsonDes.get("contentType").toString());
+                    newPost.setCaption(caption);
+                    newPost.setContentType(contentType);
                     newPost.setCategory(postCategoryMst.get());
-                    if(userType.equalsIgnoreCase("business")){
+                    if (userType.equalsIgnoreCase("business")) {
                         newPost.setBusinessUser(businessUser.get());
                         newPost.setUserType(UserType.BUSINESS);
-                    }else {
+                    } else {
                         newPost.setUser(fetchedUser.get());
                         newPost.setUserType(UserType.NORMAL);
                     }
@@ -318,17 +321,5 @@ public class PostServiceImpl implements PostService {
         }
         return extension;
     }
-
-
-//    public String fileExtension(MultipartFile file) {
-//        String originalFilename = file.getOriginalFilename();
-//        int dotIndex = originalFilename.lastIndexOf('.');
-//
-//        if (dotIndex > 0) {
-//            return originalFilename.substring(dotIndex + 1);
-//        }
-//
-//        return "";
-//    }
 
 }

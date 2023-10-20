@@ -1,15 +1,18 @@
 package com.app.model.entity;
 
-import com.app.model.enums.FollowStatus;
 import jakarta.persistence.*;
-import lombok.*;
 import java.util.Date;
+import com.app.model.enums.FollowStatus;
+import lombok.*;
 
 @Entity
-@Table(name = "user_followings")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
+@Table(
+        name = "user_followings",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"follower_user_id", "followed_user_id"}))
 public class UserFollowings {
 
     @Id
