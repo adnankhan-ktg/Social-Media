@@ -97,7 +97,7 @@ public class PostController {
     @GetMapping("/{postId}/likes")
     public CommonResponse getLikesForPost(@PathVariable("postId") int postId) {
         log.info("PostController :: getLikesForPost - START");
-        CommonResponse res = new CommonResponse();
+        CommonResponse res;
 
         try {
             res = this.postService.getLikesForPost(postId);

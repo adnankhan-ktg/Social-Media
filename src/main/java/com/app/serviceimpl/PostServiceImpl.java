@@ -10,14 +10,11 @@ import com.app.repository.*;
 import com.app.service.PostService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -48,6 +45,9 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private BusinessUserRepository businessUserRepository;
 
+    @Autowired
+    private HashtagRepository hashtagRepository;
+
     private final static Logger log = LoggerFactory.getLogger(UserController.class);
 
 
@@ -64,6 +64,7 @@ public class PostServiceImpl implements PostService {
             });
 
             List<Integer> taggedUsers = (List<Integer>) jsonMap.get("tagged_users");
+            List<Integer> hashtags = (List<Integer>) jsonMap.get("hashtags");
 
             String userType = (String) jsonMap.get("userType");
             int categoryId = (int) jsonMap.get("categoryId");
@@ -107,8 +108,10 @@ public class PostServiceImpl implements PostService {
                     }
 
                     Set<User> actualTaggedUser = new HashSet<>(this.userRepository.findByIdIn(taggedUsers));
+                    Set<HashtagMst> actualHashtags = new HashSet<>(this.hashtagRepository.findByIdIn(hashtags));
 
                     newPost.setTaggedUsers(actualTaggedUser);
+                    newPost.setHashtags(actualHashtags);
 
                     newPost.setPostUrl(dir);
                     if (Objects.isNull(this.postRepository.save(newPost))) {

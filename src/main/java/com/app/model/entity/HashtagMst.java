@@ -2,6 +2,7 @@ package com.app.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.util.Date;
 import java.util.Set;
 
@@ -24,11 +25,7 @@ public class HashtagMst {
     @Column(name = "created_at", nullable = false)
     private Date createdAt = new Date();
 
-    @ManyToMany
-    @JoinTable(
-            name = "hashtag_category",
-            joinColumns = @JoinColumn(name = "hashtag_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<CategoryMst> categories;
+    @ManyToOne
+    private CategoryMst categories;
 }
 

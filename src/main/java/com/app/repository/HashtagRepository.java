@@ -4,7 +4,10 @@ import com.app.model.entity.HashtagMst;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface HashtagRepository extends JpaRepository<HashtagMst, Long> {
+import java.util.List;
 
+@Repository
+public interface HashtagRepository extends JpaRepository<HashtagMst, Integer> {
+
+   List<HashtagMst> findByIdIn(List<Integer> list);
 }

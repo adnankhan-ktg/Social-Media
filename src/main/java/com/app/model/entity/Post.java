@@ -52,7 +52,7 @@ public class Post {
     @JoinTable(name = "post_hashtags",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
-    private List<HashtagMst> hashtags;
+    private Set<HashtagMst> hashtags;
 
 
     @ManyToMany

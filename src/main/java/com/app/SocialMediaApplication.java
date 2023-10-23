@@ -9,8 +9,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class SocialMediaApplication {
 
     public static void main(String[] args) {
-
         SpringApplication.run(SocialMediaApplication.class, args);
     }
-
 }
