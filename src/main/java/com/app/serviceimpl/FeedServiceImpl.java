@@ -7,16 +7,11 @@ import com.app.model.interfacedto.PostDtoInterface;
 import com.app.model.response.CommonResponse;
 import com.app.repository.InteractionLogRepository;
 import com.app.repository.PostRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.app.service.FeedService;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 @Service

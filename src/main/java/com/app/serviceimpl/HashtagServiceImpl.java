@@ -1,6 +1,5 @@
 package com.app.serviceimpl;
 
-import com.app.controller.UserController;
 import com.app.helper.CommonResHelper;
 import com.app.model.response.CommonResponse;
 import com.app.service.HashtagService;

@@ -4,7 +4,7 @@ import com.app.helper.CommonResHelper;
 import com.app.model.entity.CategoryMst;
 import com.app.model.response.CommonResponse;
 import com.app.repository.PostCategoryMstRepository;
-import com.app.service.PostCategoryMstService;
+import com.app.service.ContentCategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PostCategoryMstServiceImpl implements PostCategoryMstService {
+public class PostCategoryMstServiceImpl implements ContentCategoryService {
 
     @Autowired
     private PostCategoryMstRepository categoryMstRepository;
 
-    private static final Logger log = LoggerFactory.getLogger(PostCategoryMstService.class);
+    private static final Logger log = LoggerFactory.getLogger(ContentCategoryService.class);
 
     @Override
     public CommonResponse getCategoryMstData() {

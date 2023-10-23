@@ -1,7 +1,5 @@
 package com.app.model.interfacedto;
 
-import lombok.ToString;
-
 import java.util.Date;
 
 public interface PostDtoInterface {
